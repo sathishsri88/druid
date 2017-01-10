@@ -45,11 +45,7 @@ import org.eclipse.aether.resolution.DependencyRequest;
 import org.eclipse.aether.util.artifact.JavaScopes;
 import org.eclipse.aether.util.filter.DependencyFilterUtils;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -136,7 +132,8 @@ public class PullDependencies implements Runnable
 
   private static final List<String> DEFAULT_REMOTE_REPOSITORIES = ImmutableList.of(
       "https://repo1.maven.org/maven2/",
-      "https://metamx.artifactoryonline.com/metamx/pub-libs-releases-local"
+          "https://metamx.artifactoryonline.com/metamx/pub-libs-releases-local",
+          "http://repo.hortonworks.com/content/groups/public"
   );
 
   private TeslaAether aether;

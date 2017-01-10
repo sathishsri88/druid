@@ -39,6 +39,26 @@
         </dependency>
     </dependencies>
 
+    <repositories>
+        <repository>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+                <checksumPolicy>warn</checksumPolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+                <updatePolicy>never</updatePolicy>
+                <checksumPolicy>fail</checksumPolicy>
+            </snapshots>
+            <id>HDPReleases</id>
+            <name>HDP Releases</name>
+            <!--<url>http://repo.hortonworks.com/content/repositories/releases/</url>-->
+            <url>http://repo.hortonworks.com/content/groups/public</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
+
     <build>
         <plugins>
             <plugin>
@@ -99,6 +119,8 @@
                                 <argument>io.druid.extensions:mysql-metadata-storage</argument>
                                 <argument>-c</argument>
                                 <argument>io.druid.extensions:postgresql-metadata-storage</argument>
+                                <argument>-c</argument>
+                                <argument>io.druid.extensions.contrib:druid-parquet-extensions</argument>
                             </arguments>
                         </configuration>
                     </execution>

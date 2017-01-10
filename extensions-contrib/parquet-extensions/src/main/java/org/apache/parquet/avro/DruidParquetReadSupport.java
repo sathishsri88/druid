@@ -22,9 +22,10 @@ package org.apache.parquet.avro;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import io.druid.data.input.impl.DimensionSchema;
+import io.druid.data.input.parquet.ParquetHadoopInputRowParser;
+import io.druid.data.input.parquet.model.ParquetParser;
 import io.druid.indexer.HadoopDruidIndexerConfig;
 import io.druid.query.aggregation.AggregatorFactory;
-import io.druid.query.aggregation.CountAggregatorFactory;
 import org.apache.avro.Schema;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.hadoop.conf.Configuration;
@@ -38,65 +39,72 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class DruidParquetReadSupport extends AvroReadSupport<GenericRecord>
-{
-  private MessageType getPartialReadSchema(InitContext context)
-  {
-    MessageType fullSchema = context.getFileSchema();
+public class DruidParquetReadSupport extends AvroReadSupport<GenericRecord> {
+    private MessageType getPartialReadSchema(InitContext context) {
+        MessageType fullSchema = context.getFileSchema();
 
-    String name = fullSchema.getName();
+        String name = fullSchema.getName();
 
-    HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromConfiguration(context.getConfiguration());
-    String tsField = config.getParser().getParseSpec().getTimestampSpec().getTimestampColumn();
+        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromConfiguration(context.getConfiguration());
+        String tsField = config.getParser().getParseSpec().getTimestampSpec().getTimestampColumn();
 
-    List<DimensionSchema> dimensionSchema = config.getParser().getParseSpec().getDimensionsSpec().getDimensions();
-    Set<String> dimensions = Sets.newHashSet();
-    for (DimensionSchema dim : dimensionSchema) {
-      dimensions.add(dim.getName());
+        List<DimensionSchema> dimensionSchema = config.getParser().getParseSpec().getDimensionsSpec().getDimensions();
+        Set<String> dimensions = Sets.newHashSet();
+        for (DimensionSchema dim : dimensionSchema) {
+            dimensions.add(dim.getName());
+        }
+
+        Set<String> metricsFields = Sets.newHashSet();
+        for (AggregatorFactory agg : config.getSchema().getDataSchema().getAggregators()) {
+            metricsFields.addAll(agg.requiredFields());
+        }
+
+        List<Type> partialFields = Lists.newArrayList();
+        final ParquetParser parquetParser = ((ParquetHadoopInputRowParser) config.getParser()).getParquetParser();
+
+        //Checking on parquet parsers root field name
+        if (parquetParser != null) {
+            for (Type type : fullSchema.getFields()) {
+                if (tsField.equals(type.getName())
+                        || parquetParser.containsType(type.getName())) {
+                    partialFields.add(type);
+                }
+            }
+        }
+
+        /*for (Type type : fullSchema.getFields()) {
+            if (tsField.equals(type.getName())
+                    || metricsFields.contains(type.getName())
+                    || dimensions.size() > 0 && contains(dimensions, type.getName())
+                    || dimensions.size() == 0) {
+                partialFields.add(type);
+            }
+        }*/
+
+        return new MessageType(name, partialFields);
     }
 
-    Set<String> metricsFields = Sets.newHashSet();
-    for (AggregatorFactory agg : config.getSchema().getDataSchema().getAggregators()) {
-      metricsFields.addAll(agg.requiredFields());
+    public ReadContext init(InitContext context) {
+        MessageType requestedProjection = getSchemaForRead(context.getFileSchema(), getPartialReadSchema(context));
+        return new ReadContext(requestedProjection);
     }
 
-    List<Type> partialFields = Lists.newArrayList();
+    @Override
+    public RecordMaterializer<GenericRecord> prepareForRead(
+            Configuration configuration, Map<String, String> keyValueMetaData,
+            MessageType fileSchema, ReadContext readContext
+    ) {
 
-    for (Type type : fullSchema.getFields()) {
-      if (tsField.equals(type.getName())
-          || metricsFields.contains(type.getName())
-          || dimensions.size() > 0 && dimensions.contains(type.getName())
-          || dimensions.size() == 0) {
-        partialFields.add(type);
-      }
+        MessageType parquetSchema = readContext.getRequestedSchema();
+        Schema avroSchema = new AvroSchemaConverter(configuration).convert(parquetSchema);
+
+        Class<? extends AvroDataSupplier> suppClass = configuration.getClass(
+                AVRO_DATA_SUPPLIER,
+                SpecificDataSupplier.class,
+                AvroDataSupplier.class
+        );
+        AvroDataSupplier supplier = ReflectionUtils.newInstance(suppClass, configuration);
+        return new AvroRecordMaterializer<GenericRecord>(parquetSchema, avroSchema, supplier.get());
     }
-
-    return new MessageType(name, partialFields);
-  }
-
-  public ReadContext init(InitContext context)
-  {
-    MessageType requestedProjection = getSchemaForRead(context.getFileSchema(), getPartialReadSchema(context));
-    return new ReadContext(requestedProjection);
-  }
-
-  @Override
-  public RecordMaterializer<GenericRecord> prepareForRead(
-      Configuration configuration, Map<String, String> keyValueMetaData,
-      MessageType fileSchema, ReadContext readContext
-  )
-  {
-
-    MessageType parquetSchema = readContext.getRequestedSchema();
-    Schema avroSchema = new AvroSchemaConverter(configuration).convert(parquetSchema);
-
-    Class<? extends AvroDataSupplier> suppClass = configuration.getClass(
-        AVRO_DATA_SUPPLIER,
-        SpecificDataSupplier.class,
-        AvroDataSupplier.class
-    );
-    AvroDataSupplier supplier = ReflectionUtils.newInstance(suppClass, configuration);
-    return new AvroRecordMaterializer<GenericRecord>(parquetSchema, avroSchema, supplier.get());
-  }
 
 }
