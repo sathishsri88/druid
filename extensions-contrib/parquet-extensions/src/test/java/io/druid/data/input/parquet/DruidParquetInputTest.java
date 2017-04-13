@@ -18,10 +18,7 @@
  */
 package io.druid.data.input.parquet;
 
-import com.google.common.collect.ImmutableMap;
-import com.google.common.collect.Maps;
 import io.druid.data.input.InputRow;
-import io.druid.data.input.impl.InputRowParser;
 import io.druid.indexer.HadoopDruidIndexerConfig;
 import io.druid.indexer.path.StaticPathSpec;
 import org.apache.avro.generic.GenericRecord;
@@ -35,68 +32,99 @@ import org.apache.hadoop.mapreduce.TaskAttemptID;
 import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 import org.apache.hadoop.mapreduce.task.TaskAttemptContextImpl;
 import org.apache.hadoop.util.ReflectionUtils;
-import org.apache.parquet.ParquetRuntimeException;
-import org.apache.parquet.avro.AvroParquetWriter;
-import org.apache.parquet.hadoop.ParquetFileWriter;
-import org.apache.parquet.hadoop.ParquetWriter;
-import org.apache.parquet.hadoop.api.WriteSupport;
-import org.apache.parquet.io.api.Binary;
-import org.apache.parquet.io.api.RecordConsumer;
-import org.apache.parquet.schema.GroupType;
-import org.apache.parquet.schema.MessageType;
-import org.apache.parquet.schema.PrimitiveType;
-import org.apache.parquet.schema.Type;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
 
-import static org.apache.parquet.avro.AvroParquetWriter.builder;
 import static org.junit.Assert.assertEquals;
 
-public class DruidParquetInputTest
-{
-  @Test
-  public void test() throws IOException, InterruptedException {
-    HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/wikipedia_hadoop_parquet_job.json"));
-    Job job = Job.getInstance(new Configuration());
-    config.intoConfiguration(job);
-    GenericRecord data = getFirstRecord(job, "example/wikipedia_list.parquet");
+public class DruidParquetInputTest {
+    @Test
+    public void test() throws IOException, InterruptedException {
+        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/wikipedia_hadoop_parquet_job.json"));
+        Job job = Job.getInstance(new Configuration());
+        config.intoConfiguration(job);
+        GenericRecord data = getFirstRecord(job, "example/wikipedia_list.parquet");
 
-    // field not read, should return null
-    assertEquals(data.get("added"), null);
-    assertEquals(data.get("page"), new Utf8("Gypsy Danger"));
-    assertEquals(config.getParser().parse(data).getDimension("page").get(0), "Gypsy Danger");
-  }
+        // field not read, should return null
+        assertEquals(data.get("added"), null);
+        assertEquals(data.get("page"), new Utf8("Gypsy Danger"));
+        assertEquals(config.getParser().parse(data).getDimension("page").get(0), "Gypsy Danger");
+    }
 
-  @Test
-  public void testBinaryAsString() throws IOException, InterruptedException
-  {
-    HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/impala_hadoop_parquet_job.json"));
-    Job job = Job.getInstance(new Configuration());
-    config.intoConfiguration(job);
-    GenericRecord data = getFirstRecord(job, ((StaticPathSpec) config.getPathSpec()).getPaths());
+    @Test
+    public void testBinaryAsString() throws IOException, InterruptedException {
+        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/impala_hadoop_parquet_job.json"));
+        Job job = Job.getInstance(new Configuration());
+        config.intoConfiguration(job);
+        GenericRecord data = getFirstRecord(job, ((StaticPathSpec) config.getPathSpec()).getPaths());
 
-    InputRow row = config.getParser().parse(data);
-    // without binaryAsString: true, the value would something like "[104, 101, 121, 32, 116, 104, 105, 115, 32, 105, 115, 3.... ]"
-    assertEquals(row.getDimension("field").get(0), "hey this is &é(-è_çà)=^$ù*! Ω^^");
-    assertEquals(row.getTimestampFromEpoch(), 1471800234);
-  }
+        InputRow row = config.getParser().parse(data);
+        // without binaryAsString: true, the value would something like "[104, 101, 121, 32, 116, 104, 105, 115, 32, 105, 115, 3.... ]"
+        assertEquals(row.getDimension("field").get(0), "hey this is &é(-è_çà)=^$ù*! Ω^^");
+        assertEquals(row.getTimestampFromEpoch(), 1471800234);
+    }
 
-  private GenericRecord getFirstRecord(Job job, String parquetPath) throws IOException, InterruptedException {
-    File testFile = new File(parquetPath);
-    Path path = new Path(testFile.getAbsoluteFile().toURI());
-    FileSplit split = new FileSplit(path, 0, testFile.length(), null);
+    @Test
+    public void testParquetMapParser() throws IOException, InterruptedException {
+        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/map_parser_hadoop_parquet_job.json"));
+        Job job = Job.getInstance(new Configuration());
+        config.intoConfiguration(job);
+        GenericRecord data = getFirstRecord(job, ((StaticPathSpec) config.getPathSpec()).getPaths());
 
-    DruidParquetInputFormat inputFormat = ReflectionUtils.newInstance(DruidParquetInputFormat.class, job.getConfiguration());
-    TaskAttemptContext context = new TaskAttemptContextImpl(job.getConfiguration(), new TaskAttemptID());
-    RecordReader reader = inputFormat.createRecordReader(split, context);
+        InputRow row = config.getParser().parse(data);
+        System.out.println(row);
+        assertEquals(row.getDimension("framework_call_type").get(0),"si");
+//        assertEquals(row.getDimension("cookie_id"),null);
+        assertEquals(row.getDimension("qual_experiments").size(),338);
+    }
 
-    reader.initialize(split, context);
-    reader.nextKeyValue();
-    GenericRecord data = (GenericRecord) reader.getCurrentValue();
-    reader.close();
-    return data;
-  }
+    @Test
+    public void testElmoEventParquetParser() throws IOException, InterruptedException {
+        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/elmo_all_attributes_hadoop_parquet_job.json"));
+        Job job = Job.getInstance(new Configuration());
+        config.intoConfiguration(job);
+        GenericRecord data = getFirstRecord(job, ((StaticPathSpec) config.getPathSpec()).getPaths());
+
+        InputRow row = config.getParser().parse(data);
+        System.out.println(row);
+        assertEquals(row.getDimension("framework_call_type").get(0),"si");
+//        assertEquals(row.getDimension("cookie_id"),null);
+        assertEquals(row.getDimension("qual_experiments").size(),338);
+    }
+
+    @Test
+    public void testParquetMapParserWithEmptyAttrs() throws IOException, InterruptedException {
+        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/map_empty_attrs_hadoop_parquet_job.json"));
+        Job job = Job.getInstance(new Configuration());
+        config.intoConfiguration(job);
+        GenericRecord data = getFirstRecord(job, ((StaticPathSpec) config.getPathSpec()).getPaths());
+
+        InputRow row = config.getParser().parse(data);
+        System.out.println(row);
+//        assertEquals(row.getDimension("framework_call_type").get(0),"si");
+//        assertEquals(row.getDimension("cookie_id"),null);
+//        assertEquals(row.getDimension("qual_experiments").size(),338);
+    }
+
+    private GenericRecord getFirstRecord(Job job, String parquetPath) throws IOException, InterruptedException {
+        File testFile = new File(parquetPath);
+        Path path = new Path(testFile.getAbsoluteFile().toURI());
+        FileSplit split = new FileSplit(path, 0, testFile.length(), null);
+
+        DruidParquetInputFormat inputFormat = ReflectionUtils.newInstance(DruidParquetInputFormat.class, job.getConfiguration());
+        TaskAttemptContext context = new TaskAttemptContextImpl(job.getConfiguration(), new TaskAttemptID());
+        RecordReader reader = inputFormat.createRecordReader(split, context);
+
+        reader.initialize(split, context);
+//        reader.nextKeyValue();
+        while (reader.nextKeyValue()) {
+            System.out.println(reader.getCurrentKey() + " - " + reader.getCurrentValue());
+        }
+        GenericRecord data = (GenericRecord) reader.getCurrentValue();
+        reader.close();
+        return data;
+    }
 
 }

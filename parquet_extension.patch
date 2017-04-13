@@ -1,0 +1,2076 @@
+diff --git a/1 b/1
+new file mode 100644
+index 0000000..56e0c47
+--- /dev/null
++++ b/1
+@@ -0,0 +1,837 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<!--
++  ~ Druid - a distributed column store.
++  ~ Copyright 2012 - 2015 Metamarkets Group Inc.
++  ~
++  ~ Licensed under the Apache License, Version 2.0 (the "License");
++  ~ you may not use this file except in compliance with the License.
++  ~ You may obtain a copy of the License at
++  ~
++  ~     http://www.apache.org/licenses/LICENSE-2.0
++  ~
++  ~ Unless required by applicable law or agreed to in writing, software
++  ~ distributed under the License is distributed on an "AS IS" BASIS,
++  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
++  ~ See the License for the specific language governing permissions and
++  ~ limitations under the License.
++  -->
++
++<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
++    <modelVersion>4.0.0</modelVersion>
++
++    <parent>
++        <groupId>io.druid</groupId>
++        <artifactId>oss-parent</artifactId>
++        <version>2</version>
++    </parent>
++
++    <artifactId>druid</artifactId>
++    <version>0.9.1.2-SNAPSHOT</version>
++    <packaging>pom</packaging>
++
++    <name>${project.groupId}:${project.artifactId}</name>
++    <description>Druid - A Distributed Column Store</description>
++    <url>http://druid.io/</url>
++
++    <licenses>
++        <license>
++            <name>Apache License, Version 2.0</name>
++            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
++        </license>
++    </licenses>
++
++    <developers>
++        <developer>
++            <name>Druid Committers</name>
++            <url>http://druid.io/community/index.html#committers</url>
++        </developer>
++    </developers>
++
++    <inceptionYear>2011</inceptionYear>
++
++    <scm>
++        <connection>scm:git:ssh://git@github.com/druid-io/druid.git</connection>
++        <developerConnection>scm:git:ssh://git@github.com/druid-io/druid.git</developerConnection>
++        <url>https://github.com/druid-io/druid.git</url>
++        <tag>0.9.1-SNAPSHOT</tag>
++    </scm>
++
++    <properties>
++        <metamx.java-util.version>0.27.9</metamx.java-util.version>
++        <apache.curator.version>2.10.0</apache.curator.version>
++        <jetty.version>9.2.5.v20141112</jetty.version>
++        <jersey.version>1.19</jersey.version>
++        <!-- Watch out for Hadoop compatibility when updating to >= 2.5; see https://github.com/druid-io/druid/pull/1669 -->
++        <jackson.version>2.4.6</jackson.version>
++        <log4j.version>2.5</log4j.version>
++        <slf4j.version>1.7.12</slf4j.version>
++        <hadoop.compile.version>2.6.0</hadoop.compile.version>
++    </properties>
++
++    <modules>
++        <module>api</module>
++        <module>common</module>
++        <module>examples</module>
++        <module>indexing-hadoop</module>
++        <module>indexing-service</module>
++        <module>processing</module>
++        <module>server</module>
++        <module>services</module>
++        <module>integration-tests</module>
++        <module>benchmarks</module>
++        <module>aws-common</module>
++        <!-- Core extensions -->
++        <module>extensions-core/avro-extensions</module>
++        <module>extensions-core/datasketches</module>
++        <module>extensions-core/hdfs-storage</module>
++        <module>extensions-core/histogram</module>
++        <module>extensions-core/kafka-eight</module>
++        <module>extensions-core/kafka-extraction-namespace</module>
++        <module>extensions-core/kafka-indexing-service</module>
++        <module>extensions-core/mysql-metadata-storage</module>
++        <module>extensions-core/postgresql-metadata-storage</module>
++        <module>extensions-core/lookups-cached-global</module>
++        <module>extensions-core/namespace-lookup</module> <!-- ONLY FOR 0.9.1 TRANSITION -->
++        <module>extensions-core/s3-extensions</module>
++        <!-- Community extensions -->
++        <module>extensions-contrib/azure-extensions</module>
++        <module>extensions-contrib/cassandra-storage</module>
++        <module>extensions-contrib/druid-rocketmq</module>
++        <module>extensions-contrib/cloudfiles-extensions</module>
++        <module>extensions-contrib/graphite-emitter</module>
++        <module>extensions-contrib/kafka-eight-simpleConsumer</module>
++        <module>extensions-contrib/rabbitmq</module>
++        <module>extensions-contrib/distinctcount</module>
++        <module>extensions-contrib/parquet-extensions</module>
++        <module>extensions-contrib/statsd-emitter</module>
++
++        <!-- distribution packaging -->
++        <module>distribution</module>
++    </modules>
++
++    <dependencyManagement>
++        <dependencies>
++            <!-- Compile Scope -->
++            <dependency>
++                <groupId>com.metamx</groupId>
++                <artifactId>emitter</artifactId>
++                <version>0.3.6</version>
++            </dependency>
++            <dependency>
++                <groupId>com.metamx</groupId>
++                <artifactId>http-client</artifactId>
++                <version>1.0.4</version>
++            </dependency>
++            <dependency>
++                <groupId>com.metamx</groupId>
++                <artifactId>java-util</artifactId>
++                <version>${metamx.java-util.version}</version>
++                <exclusions>
++                    <exclusion>
++                        <groupId>org.slf4j</groupId>
++                        <artifactId>slf4j-api</artifactId>
++                    </exclusion>
++                </exclusions>
++            </dependency>
++            <dependency>
++                <groupId>com.metamx</groupId>
++                <artifactId>bytebuffer-collections</artifactId>
++                <version>0.2.4</version>
++            </dependency>
++            <dependency>
++                <groupId>com.metamx</groupId>
++                <artifactId>server-metrics</artifactId>
++                <version>0.2.8</version>
++            </dependency>
++            <dependency>
++                <groupId>commons-codec</groupId>
++                <artifactId>commons-codec</artifactId>
++                <version>1.7</version>
++            </dependency>
++            <dependency>
++                <groupId>commons-httpclient</groupId>
++                <artifactId>commons-httpclient</artifactId>
++                <version>3.1</version>
++            </dependency>
++            <dependency>
++                <groupId>commons-io</groupId>
++                <artifactId>commons-io</artifactId>
++                <version>2.4</version>
++            </dependency>
++            <dependency>
++                <groupId>commons-logging</groupId>
++                <artifactId>commons-logging</artifactId>
++                <version>1.1.1</version>
++            </dependency>
++            <dependency>
++                <groupId>commons-lang</groupId>
++                <artifactId>commons-lang</artifactId>
++                <version>2.6</version>
++            </dependency>
++            <dependency>
++                <groupId>com.amazonaws</groupId>
++                <artifactId>aws-java-sdk</artifactId>
++                <version>1.10.21</version>
++                <exclusions>
++                    <exclusion>
++                        <groupId>javax.mail</groupId>
++                        <artifactId>mail</artifactId>
++                    </exclusion>
++                    <exclusion>
++                        <groupId>com.fasterxml.jackson.core</groupId>
++                        <artifactId>jackson-databind</artifactId>
++                    </exclusion>
++                    <exclusion>
++                        <groupId>com.fasterxml.jackson.core</groupId>
++                        <artifactId>jackson-annotations</artifactId>
++                    </exclusion>
++                    <exclusion>
++                        <groupId>commons-codec</groupId>
++                        <artifactId>commons-codec</artifactId>
++                    </exclusion>
++                </exclusions>
++            </dependency>
++            <dependency>
++                <groupId>com.ning</groupId>
++                <artifactId>compress-lzf</artifactId>
++                <version>1.0.3</version>
++            </dependency>
++            <dependency>
++                <groupId>io.airlift</groupId>
++                <artifactId>airline</artifactId>
++                <version>0.7</version>
++            </dependency>
++            <dependency>
++                <groupId>org.skife.config</groupId>
++                <artifactId>config-magic</artifactId>
++                <version>0.9</version>
++                <exclusions>
++                    <exclusion>
++                        <groupId>org.slf4j</groupId>
++                        <artifactId>slf4j-api</artifactId>
++                    </exclusion>
++                </exclusions>
++            </dependency>
++            <dependency>
++                <groupId>org.apache.zookeeper</groupId>
++                <artifactId>zookeeper</artifactId>
++                <version>3.4.8</version>
++                <exclusions>
++                    <exclusion>
++                        <groupId>org.slf4j</groupId>
++                        <artifactId>slf4j-log4j12</artifactId>
++                    </exclusion>
++                    <exclusion>
++                        <groupId>log4j</groupId>
++                        <artifactId>log4j</artifactId>
++                    </exclusion>
++                </exclusions>
++            </dependency>
++            <dependency>
++                <groupId>org.apache.curator</groupId>
++                <artifactId>curator-client</artifactId>
++                <version>${apache.curator.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>org.apache.curator</groupId>
++                <artifactId>curator-framework</artifactId>
++                <version>${apache.curator.version}</version>
++                <exclusions>
++                    <exclusion>
++                        <groupId>org.jboss.netty</groupId>
++                        <artifactId>netty</artifactId>
++                    </exclusion>
++                </exclusions>
++            </dependency>
++            <dependency>
++                <groupId>org.apache.curator</groupId>
++                <artifactId>curator-recipes</artifactId>
++                <version>${apache.curator.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>org.apache.curator</groupId>
++                <artifactId>curator-x-discovery</artifactId>
++                <version>${apache.curator.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>com.google.guava</groupId>
++                <artifactId>guava</artifactId>
++                <version>16.0.1</version>
++            </dependency>
++            <dependency>
++                <groupId>com.google.inject</groupId>
++                <artifactId>guice</artifactId>
++                <version>4.0-beta</version>
++            </dependency>
++            <dependency>
++                <groupId>com.google.inject.extensions</groupId>
++                <artifactId>guice-servlet</artifactId>
++                <version>4.0-beta</version>
++            </dependency>
++            <dependency>
++                <groupId>com.google.inject.extensions</groupId>
++                <artifactId>guice-multibindings</artifactId>
++                <version>4.0-beta</version>
++            </dependency>
++            <dependency>
++                <groupId>com.ibm.icu</groupId>
++                <artifactId>icu4j</artifactId>
++                <version>4.8.1</version>
++            </dependency>
++            <dependency>
++                <groupId>org.mozilla</groupId>
++                <artifactId>rhino</artifactId>
++                <version>1.7R5</version>
++            </dependency>
++            <dependency>
++                <groupId>com.fasterxml.jackson.core</groupId>
++                <artifactId>jackson-annotations</artifactId>
++                <version>${jackson.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>com.fasterxml.jackson.core</groupId>
++                <artifactId>jackson-core</artifactId>
++                <version>${jackson.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>com.fasterxml.jackson.core</groupId>
++                <artifactId>jackson-databind</artifactId>
++                <version>${jackson.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>com.fasterxml.jackson.datatype</groupId>
++                <artifactId>jackson-datatype-guava</artifactId>
++                <version>${jackson.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>com.fasterxml.jackson.datatype</groupId>
++                <artifactId>jackson-datatype-joda</artifactId>
++                <version>${jackson.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>com.fasterxml.jackson.dataformat</groupId>
++                <artifactId>jackson-dataformat-smile</artifactId>
++                <version>${jackson.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>com.fasterxml.jackson.jaxrs</groupId>
++                <artifactId>jackson-jaxrs-json-provider</artifactId>
++                <version>${jackson.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>com.fasterxml.jackson.jaxrs</groupId>
++                <artifactId>jackson-jaxrs-smile-provider</artifactId>
++                <version>${jackson.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>org.hibernate</groupId>
++                <artifactId>hibernate-validator</artifactId>
++                <version>5.1.3.Final</version>
++            </dependency>
++            <dependency>
++                <groupId>javax.validation</groupId>
++                <artifactId>validation-api</artifactId>
++                <version>1.1.0.Final</version>
++            </dependency>
++            <dependency>
++                <groupId>javax.inject</groupId>
++                <artifactId>javax.inject</artifactId>
++                <version>1</version>
++            </dependency>
++            <dependency>
++                <groupId>javax.el</groupId>
++                <artifactId>javax.el-api</artifactId>
++                <version>3.0.0</version>
++            </dependency>
++            <dependency>
++                <groupId>org.glassfish</groupId>
++                <artifactId>javax.el</artifactId>
++                <version>3.0.0</version>
++            </dependency>
++            <dependency>
++                <groupId>org.jdbi</groupId>
++                <artifactId>jdbi</artifactId>
++                <version>2.63.1</version>
++            </dependency>
++            <dependency>
++                <groupId>com.sun.jersey</groupId>
++                <artifactId>jersey-core</artifactId>
++                <version>${jersey.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>com.sun.jersey.contribs</groupId>
++                <artifactId>jersey-guice</artifactId>
++                <version>${jersey.version}</version>
++                <exclusions>
++                    <exclusion>
++                        <groupId>com.google.inject</groupId>
++                        <artifactId>guice</artifactId>
++                    </exclusion>
++                    <exclusion>
++                        <groupId>com.google.inject.extensions</groupId>
++                        <artifactId>guice-servlet</artifactId>
++                    </exclusion>
++                </exclusions>
++            </dependency>
++            <dependency>
++                <groupId>com.sun.jersey</groupId>
++                <artifactId>jersey-server</artifactId>
++                <version>${jersey.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>org.eclipse.jetty</groupId>
++                <artifactId>jetty-server</artifactId>
++                <version>${jetty.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>org.eclipse.jetty</groupId>
++                <artifactId>jetty-servlet</artifactId>
++                <version>${jetty.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>org.eclipse.jetty</groupId>
++                <artifactId>jetty-servlets</artifactId>
++                <version>${jetty.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>org.eclipse.jetty</groupId>
++                <artifactId>jetty-proxy</artifactId>
++                <version>${jetty.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>joda-time</groupId>
++                <artifactId>joda-time</artifactId>
++                <version>2.8.2</version>
++            </dependency>
++            <dependency>
++                <groupId>com.google.code.findbugs</groupId>
++                <artifactId>jsr305</artifactId>
++                <version>2.0.1</version>
++            </dependency>
++            <dependency>
++                <groupId>org.apache.logging.log4j</groupId>
++                <artifactId>log4j-api</artifactId>
++                <version>${log4j.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>org.apache.logging.log4j</groupId>
++                <artifactId>log4j-core</artifactId>
++                <version>${log4j.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>org.apache.logging.log4j</groupId>
++                <artifactId>log4j-slf4j-impl</artifactId>
++                <version>${log4j.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>org.apache.logging.log4j</groupId>
++                <artifactId>log4j-1.2-api</artifactId>
++                <version>${log4j.version}</version>
++            </dependency>
++            <dependency>
++                <!-- This is not slf4j's version because of performance concerns
++                http://www.slf4j.org/api/org/slf4j/bridge/SLF4JBridgeHandler.html
++                Please make sure to do performance tests before switching this to slf4j
++                Users wishing to use slf4j's solution are encouraged to also use
++                Logback
++                More info at
++                http://logback.qos.ch/manual/configuration.html#LevelChangePropagator
++                http://www.slf4j.org/legacy.html#jul-to-slf4j
++                -->
++                <groupId>org.apache.logging.log4j</groupId>
++                <artifactId>log4j-jul</artifactId>
++                <version>${log4j.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>org.slf4j</groupId>
++                <artifactId>jcl-over-slf4j</artifactId>
++                <version>${slf4j.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>com.lmax</groupId>
++                <artifactId>disruptor</artifactId>
++                <version>3.3.0</version>
++            </dependency>
++            <dependency>
++                <groupId>net.spy</groupId>
++                <artifactId>spymemcached</artifactId>
++                <version>2.11.7</version>
++            </dependency>
++            <dependency>
++                <groupId>org.antlr</groupId>
++                <artifactId>antlr4-runtime</artifactId>
++                <version>4.5.1</version>
++            </dependency>
++            <dependency>
++                <groupId>org.antlr</groupId>
++                <artifactId>antlr4-coordinator</artifactId>
++                <version>4.5.1</version>
++            </dependency>
++            <dependency>
++                <groupId>commons-cli</groupId>
++                <artifactId>commons-cli</artifactId>
++                <version>1.2</version>
++            </dependency>
++            <dependency>
++                <groupId>org.apache.commons</groupId>
++                <artifactId>commons-dbcp2</artifactId>
++                <version>2.0.1</version>
++            </dependency>
++            <dependency>
++                <groupId>net.jpountz.lz4</groupId>
++                <artifactId>lz4</artifactId>
++                <version>1.3.0</version>
++            </dependency>
++            <dependency>
++                <groupId>com.google.protobuf</groupId>
++                <artifactId>protobuf-java</artifactId>
++                <version>2.5.0</version>
++            </dependency>
++            <dependency>
++                <groupId>io.tesla.aether</groupId>
++                <artifactId>tesla-aether</artifactId>
++                <version>0.0.5</version>
++                <exclusions>
++                    <exclusion>
++                        <groupId>org.slf4j</groupId>
++                        <artifactId>slf4j-api</artifactId>
++                    </exclusion>
++                </exclusions>
++            </dependency>
++            <dependency>
++                <groupId>org.eclipse.aether</groupId>
++                <artifactId>aether-api</artifactId>
++                <version>0.9.0.M2</version>
++            </dependency>
++            <dependency>
++                <groupId>net.java.dev.jets3t</groupId>
++                <artifactId>jets3t</artifactId>
++                <version>0.9.4</version>
++                <exclusions>
++                    <exclusion>
++                        <groupId>commons-codec</groupId>
++                        <artifactId>commons-codec</artifactId>
++                    </exclusion>
++                    <exclusion>
++                        <groupId>commons-logging</groupId>
++                        <artifactId>commons-logging</artifactId>
++                    </exclusion>
++                    <exclusion>
++                        <groupId>org.apache.httpcomponents</groupId>
++                        <artifactId>httpclient</artifactId>
++                    </exclusion>
++                    <exclusion>
++                        <groupId>org.apache.httpcomponents</groupId>
++                        <artifactId>httpcore</artifactId>
++                    </exclusion>
++                    <exclusion>
++                        <groupId>org.codehaus.jackson</groupId>
++                        <artifactId>jackson-core-asl</artifactId>
++                    </exclusion>
++                    <exclusion>
++                        <groupId>org.codehaus.jackson</groupId>
++                        <artifactId>jackson-mapper-asl</artifactId>
++                    </exclusion>
++                </exclusions>
++            </dependency>
++            <!-- The htttpcomponents artifacts have non-matching release cadence -->
++            <dependency>
++                <groupId>org.apache.httpcomponents</groupId>
++                <artifactId>httpclient</artifactId>
++                <version>4.5.1</version>
++            </dependency>
++            <dependency>
++                <groupId>org.apache.httpcomponents</groupId>
++                <artifactId>httpcore</artifactId>
++                <version>4.4.3</version>
++            </dependency>
++            <dependency>
++                <groupId>org.apache.hadoop</groupId>
++                <artifactId>hadoop-client</artifactId>
++                <version>${hadoop.compile.version}</version>
++                <scope>provided</scope>
++            </dependency>
++            <dependency>
++                <groupId>org.mapdb</groupId>
++                <artifactId>mapdb</artifactId>
++                <version>1.0.8</version>
++            </dependency>
++            <dependency>
++                <groupId>org.apache.derby</groupId>
++                <artifactId>derbynet</artifactId>
++                <version>10.11.1.1</version>
++            </dependency>
++            <dependency>
++                <groupId>org.apache.derby</groupId>
++                <artifactId>derbyclient</artifactId>
++                <version>10.11.1.1</version>
++            </dependency>
++            <dependency>
++                <groupId>org.apache.commons</groupId>
++                <artifactId>commons-math3</artifactId>
++                <version>3.6.1</version>
++            </dependency>
++
++            <!-- Test Scope -->
++            <dependency>
++                <groupId>com.metamx</groupId>
++                <artifactId>java-util</artifactId>
++                <type>test-jar</type>
++                <scope>test</scope>
++                <version>${metamx.java-util.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>org.easymock</groupId>
++                <artifactId>easymock</artifactId>
++                <version>3.3</version>
++                <scope>test</scope>
++            </dependency>
++            <dependency>
++                <groupId>junit</groupId>
++                <artifactId>junit</artifactId>
++                <version>4.11</version>
++                <scope>test</scope>
++            </dependency>
++            <dependency>
++                <groupId>org.slf4j</groupId>
++                <artifactId>slf4j-simple</artifactId>
++                <version>${slf4j.version}</version>
++            </dependency>
++            <dependency>
++                <groupId>com.carrotsearch</groupId>
++                <artifactId>junit-benchmarks</artifactId>
++                <version>0.7.2</version>
++                <scope>test</scope>
++            </dependency>
++            <dependency>
++                <groupId>com.google.caliper</groupId>
++                <artifactId>caliper</artifactId>
++                <version>0.5-rc1</version>
++                <scope>test</scope>
++            </dependency>
++            <dependency>
++                <groupId>org.apache.curator</groupId>
++                <artifactId>curator-test</artifactId>
++                <version>${apache.curator.version}</version>
++                <exclusions>
++                    <exclusion>
++                        <groupId>org.jboss.netty</groupId>
++                        <artifactId>netty</artifactId>
++                    </exclusion>
++                </exclusions>
++                <scope>test</scope>
++            </dependency>
++            <dependency>
++                <groupId>com.ircclouds.irc</groupId>
++                <artifactId>irc-api</artifactId>
++                <version>1.0-0014</version>
++                <exclusions>
++                    <exclusion>
++                        <groupId>org.slf4j</groupId>
++                        <artifactId>slf4j-api</artifactId>
++                    </exclusion>
++                </exclusions>
++            </dependency>
++            <dependency>
++                <groupId>com.maxmind.geoip2</groupId>
++                <artifactId>geoip2</artifactId>
++                <version>0.4.0</version>
++                <exclusions>
++                    <exclusion>
++                        <groupId>com.google.http-client</groupId>
++                        <artifactId>google-http-client</artifactId>
++                    </exclusion>
++                    <exclusion>
++                        <groupId>org.apache.httpcomponents</groupId>
++                        <artifactId>httpclient</artifactId>
++                    </exclusion>
++                    <exclusion>
++                        <groupId>org.apache.httpcomponents</groupId>
++                        <artifactId>httpcore</artifactId>
++                    </exclusion>
++                </exclusions>
++            </dependency>
++            <dependency>
++                <groupId>org.testng</groupId>
++                <artifactId>testng</artifactId>
++                <version>6.8.7</version>
++            </dependency>
++            <dependency>
++                <groupId>org.hamcrest</groupId>
++                <artifactId>hamcrest-all</artifactId>
++                <version>1.3</version>
++                <scope>test</scope>
++            </dependency>
++            <dependency>
++                <groupId>pl.pragmatists</groupId>
++                <artifactId>JUnitParams</artifactId>
++                <version>1.0.4</version>
++                <scope>test</scope>
++            </dependency>
++        </dependencies>
++    </dependencyManagement>
++
++    <build>
++        <plugins>
++            <plugin>
++                <groupId>org.codehaus.mojo</groupId>
++                <artifactId>cobertura-maven-plugin</artifactId>
++            </plugin>
++            <plugin>
++                <groupId>org.eluder.coveralls</groupId>
++                <artifactId>coveralls-maven-plugin</artifactId>
++                <version>4.0.0</version>
++            </plugin>
++        </plugins>
++        <pluginManagement>
++            <plugins>
++                <plugin>
++                    <groupId>org.apache.maven.plugins</groupId>
++                    <artifactId>maven-surefire-plugin</artifactId>
++                    <configuration>
++                        <!-- locale settings must be set on the command line before startup -->
++                        <!-- set heap size to work around https://github.com/travis-ci/travis-ci/issues/3396 -->
++                        <argLine>-Xmx1024m -Duser.language=en -Duser.country=US -Dfile.encoding=UTF-8
++                            -Djava.util.logging.manager=org.apache.logging.log4j.jul.LogManager
++                        </argLine>
++                        <!-- our tests are very verbose, let's keep the volume down -->
++                        <redirectTestOutputToFile>true</redirectTestOutputToFile>
++                    </configuration>
++                </plugin>
++                <plugin>
++                    <groupId>org.apache.maven.plugins</groupId>
++                    <artifactId>maven-release-plugin</artifactId>
++                    <configuration>
++                        <autoVersionSubmodules>true</autoVersionSubmodules>
++                    </configuration>
++                </plugin>
++                <plugin>
++                    <groupId>org.apache.maven.plugins</groupId>
++                    <artifactId>maven-clean-plugin</artifactId>
++                    <version>2.5</version>
++                </plugin>
++                <plugin>
++                    <groupId>org.apache.maven.plugins</groupId>
++                    <artifactId>maven-dependency-plugin</artifactId>
++                    <version>2.8</version>
++                </plugin>
++                <plugin>
++                    <groupId>org.apache.maven.plugins</groupId>
++                    <artifactId>maven-deploy-plugin</artifactId>
++                    <version>2.7</version>
++                </plugin>
++                <plugin>
++                    <groupId>org.apache.maven.plugins</groupId>
++                    <artifactId>maven-help-plugin</artifactId>
++                    <version>2.1.1</version>
++                </plugin>
++                <plugin>
++                    <groupId>org.apache.maven.plugins</groupId>
++                    <artifactId>maven-install-plugin</artifactId>
++                    <version>2.3.1</version>
++                    <executions>
++                        <execution>
++                            <phase>package</phase>
++                            <goals>
++                                <goal>install</goal>
++                            </goals>
++                        </execution>
++                    </executions>
++                </plugin>
++                <plugin>
++                    <groupId>org.apache.maven.plugins</groupId>
++                    <artifactId>maven-resources-plugin</artifactId>
++                    <version>2.5</version>
++                </plugin>
++                <plugin>
++                    <groupId>org.apache.maven.plugins</groupId>
++                    <artifactId>maven-shade-plugin</artifactId>
++                    <version>2.2</version>
++                </plugin>
++                <plugin>
++                    <groupId>org.apache.maven.plugins</groupId>
++                    <artifactId>maven-site-plugin</artifactId>
++                    <version>3.1</version>
++                </plugin>
++                <plugin>
++                    <groupId>org.scala-tools</groupId>
++                    <artifactId>maven-scala-plugin</artifactId>
++                    <version>2.15.2</version>
++                </plugin>
++                <plugin>
++                    <groupId>org.antlr</groupId>
++                    <artifactId>antlr4-maven-plugin</artifactId>
++                    <version>4.5.1</version>
++                </plugin>
++                <plugin>
++                    <groupId>org.apache.maven.plugins</groupId>
++                    <artifactId>maven-assembly-plugin</artifactId>
++                    <version>2.5.5</version>
++                </plugin>
++                <plugin>
++                    <groupId>org.codehaus.mojo</groupId>
++                    <artifactId>license-maven-plugin</artifactId>
++                    <version>1.8</version>
++                </plugin>
++                <plugin>
++                    <groupId>org.codehaus.mojo</groupId>
++                    <artifactId>exec-maven-plugin</artifactId>
++                    <version>1.2.1</version>
++                </plugin>
++                <plugin>
++                    <groupId>org.apache.maven.plugins</groupId>
++                    <artifactId>maven-javadoc-plugin</artifactId>
++                    <configuration>
++                        <!-- jdk8 started linting javadocs by default; ours are not fully compliant -->
++                        <additionalparam>-Xdoclint:none</additionalparam>
++                    </configuration>
++                </plugin>
++                <plugin>
++                    <groupId>org.codehaus.mojo</groupId>
++                    <artifactId>cobertura-maven-plugin</artifactId>
++                    <version>2.7</version>
++                    <configuration>
++                        <instrumentation>
++                            <ignores>
++                                <ignore>io.druid.sql.antlr4.*</ignore>
++                            </ignores>
++                            <excludes>
++                                <exclude>io/druid/sql/antlr4/**/*.class</exclude>
++                            </excludes>
++                        </instrumentation>
++                        <format>xml</format>
++                        <!-- aggregated reports for multi-module projects -->
++                        <aggregate>true</aggregate>
++                    </configuration>
++                </plugin>
++            </plugins>
++        </pluginManagement>
++    </build>
++
++    <profiles>
++        <profile>
++            <id>strict</id>
++            <build>
++                <pluginManagement>
++                    <plugins>
++                        <plugin>
++                            <groupId>org.apache.maven.plugins</groupId>
++                            <artifactId>maven-compiler-plugin</artifactId>
++                            <configuration>
++                                <compilerId>javac-with-errorprone</compilerId>
++                                <forceJavacCompilerUse>true</forceJavacCompilerUse>
++                            </configuration>
++                            <dependencies>
++                                <dependency>
++                                    <groupId>org.codehaus.plexus</groupId>
++                                    <artifactId>plexus-compiler-javac-errorprone</artifactId>
++                                    <version>2.5</version>
++                                </dependency>
++                            </dependencies>
++                        </plugin>
++                    </plugins>
++                </pluginManagement>
++            </build>
++        </profile>
++    </profiles>
++</project>
+diff --git a/distribution/pom.xml b/distribution/pom.xml
+index 5b98674..1ee4011 100644
+--- a/distribution/pom.xml
++++ b/distribution/pom.xml
+@@ -39,6 +39,26 @@
+         </dependency>
+     </dependencies>
+ 
++<repositories>
++    <repository>
++        <releases>
++            <enabled>true</enabled>
++            <updatePolicy>always</updatePolicy>
++            <checksumPolicy>warn</checksumPolicy>
++        </releases>
++        <snapshots>
++            <enabled>false</enabled>
++            <updatePolicy>never</updatePolicy>
++            <checksumPolicy>fail</checksumPolicy>
++        </snapshots>
++        <id>HDPReleases</id>
++        <name>HDP Releases</name>
++        <!--<url>http://repo.hortonworks.com/content/repositories/releases/</url>-->
++        <url>http://repo.hortonworks.com/content/groups/public</url>
++        <layout>default</layout>
++    </repository>
++    </repositories>
++
+     <build>
+         <plugins>
+             <plugin>
+@@ -97,6 +117,8 @@
+                                 <argument>io.druid.extensions:mysql-metadata-storage</argument>
+                                 <argument>-c</argument>
+                                 <argument>io.druid.extensions:postgresql-metadata-storage</argument>
++                                <argument>-c</argument>
++                                <argument>io.druid.extensions.contrib:druid-parquet-extensions</argument>
+                             </arguments>
+                         </configuration>
+                     </execution>
+diff --git a/extensions-contrib/parquet-extensions/example/clAndServer/._SUCCESS.crc b/extensions-contrib/parquet-extensions/example/clAndServer/._SUCCESS.crc
+new file mode 100644
+index 0000000..3b7b044
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/clAndServer/._SUCCESS.crc differ
+diff --git a/extensions-contrib/parquet-extensions/example/clAndServer/._common_metadata.crc b/extensions-contrib/parquet-extensions/example/clAndServer/._common_metadata.crc
+new file mode 100644
+index 0000000..b31b572
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/clAndServer/._common_metadata.crc differ
+diff --git a/extensions-contrib/parquet-extensions/example/clAndServer/._metadata.crc b/extensions-contrib/parquet-extensions/example/clAndServer/._metadata.crc
+new file mode 100644
+index 0000000..a032831
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/clAndServer/._metadata.crc differ
+diff --git a/extensions-contrib/parquet-extensions/example/clAndServer/_SUCCESS b/extensions-contrib/parquet-extensions/example/clAndServer/_SUCCESS
+new file mode 100644
+index 0000000..e69de29
+diff --git a/extensions-contrib/parquet-extensions/example/clAndServer/_common_metadata b/extensions-contrib/parquet-extensions/example/clAndServer/_common_metadata
+new file mode 100644
+index 0000000..6daa90b
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/clAndServer/_common_metadata differ
+diff --git a/extensions-contrib/parquet-extensions/example/clAndServer/_metadata b/extensions-contrib/parquet-extensions/example/clAndServer/_metadata
+new file mode 100644
+index 0000000..e486e9b
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/clAndServer/_metadata differ
+diff --git a/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/.part-r-00000-7065eb38-d2b5-4060-a4d1-e112726ad736.gz.parquet.crc b/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/.part-r-00000-7065eb38-d2b5-4060-a4d1-e112726ad736.gz.parquet.crc
+new file mode 100644
+index 0000000..198f01e
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/.part-r-00000-7065eb38-d2b5-4060-a4d1-e112726ad736.gz.parquet.crc differ
+diff --git a/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/.part-r-00000-7aef8936-db5d-4276-8952-e6821fe4e742.gz.parquet.crc b/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/.part-r-00000-7aef8936-db5d-4276-8952-e6821fe4e742.gz.parquet.crc
+new file mode 100644
+index 0000000..b24d948
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/.part-r-00000-7aef8936-db5d-4276-8952-e6821fe4e742.gz.parquet.crc differ
+diff --git a/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/.part-r-00001-7065eb38-d2b5-4060-a4d1-e112726ad736.gz.parquet.crc b/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/.part-r-00001-7065eb38-d2b5-4060-a4d1-e112726ad736.gz.parquet.crc
+new file mode 100644
+index 0000000..f7f8d28
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/.part-r-00001-7065eb38-d2b5-4060-a4d1-e112726ad736.gz.parquet.crc differ
+diff --git a/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/.part-r-00001-7aef8936-db5d-4276-8952-e6821fe4e742.gz.parquet.crc b/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/.part-r-00001-7aef8936-db5d-4276-8952-e6821fe4e742.gz.parquet.crc
+new file mode 100644
+index 0000000..1413d28
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/.part-r-00001-7aef8936-db5d-4276-8952-e6821fe4e742.gz.parquet.crc differ
+diff --git a/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/part-r-00000-7065eb38-d2b5-4060-a4d1-e112726ad736.gz.parquet b/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/part-r-00000-7065eb38-d2b5-4060-a4d1-e112726ad736.gz.parquet
+new file mode 100644
+index 0000000..703ecfa
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/part-r-00000-7065eb38-d2b5-4060-a4d1-e112726ad736.gz.parquet differ
+diff --git a/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/part-r-00000-7aef8936-db5d-4276-8952-e6821fe4e742.gz.parquet b/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/part-r-00000-7aef8936-db5d-4276-8952-e6821fe4e742.gz.parquet
+new file mode 100644
+index 0000000..0e07325
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/part-r-00000-7aef8936-db5d-4276-8952-e6821fe4e742.gz.parquet differ
+diff --git a/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/part-r-00001-7065eb38-d2b5-4060-a4d1-e112726ad736.gz.parquet b/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/part-r-00001-7065eb38-d2b5-4060-a4d1-e112726ad736.gz.parquet
+new file mode 100644
+index 0000000..fcabcb1
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/part-r-00001-7065eb38-d2b5-4060-a4d1-e112726ad736.gz.parquet differ
+diff --git a/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/part-r-00001-7aef8936-db5d-4276-8952-e6821fe4e742.gz.parquet b/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/part-r-00001-7aef8936-db5d-4276-8952-e6821fe4e742.gz.parquet
+new file mode 100644
+index 0000000..6282429
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/part-r-00001-7aef8936-db5d-4276-8952-e6821fe4e742.gz.parquet differ
+diff --git a/extensions-contrib/parquet-extensions/example/elmo_all_attributes_hadoop_parquet_job.json b/extensions-contrib/parquet-extensions/example/elmo_all_attributes_hadoop_parquet_job.json
+new file mode 100644
+index 0000000..8863bd1
+--- /dev/null
++++ b/extensions-contrib/parquet-extensions/example/elmo_all_attributes_hadoop_parquet_job.json
+@@ -0,0 +1,141 @@
++{
++  "type": "index_hadoop",
++  "spec": {
++    "ioConfig": {
++      "type": "hadoop",
++      "inputSpec": {
++        "type": "static",
++        "inputFormat": "io.druid.data.input.parquet.DruidParquetInputFormat",
++        "paths": "example/parquet/eventDate=2016-10-26/eventHr=00/part-r-00001-b0b86a13-1a3e-45d7-aee7-313966cfa046.gz.parquet"
++      },
++      "metadataUpdateSpec": {
++        "type": "postgresql",
++        "connectURI": "jdbc:postgresql://localhost/druid",
++        "user": "druid",
++        "password": "asdf",
++        "segmentTable": "druid_segments"
++      },
++      "segmentOutputPath": "/tmp/segments"
++    },
++    "dataSchema": {
++      "dataSource": "elmo_server",
++      "parser": {
++        "type": "parquet",
++        "binaryAsString": true,
++        "parquetParser": "{\"fields\":[\"timestamp\",\"loadDateTime\",\"stringMap[geo_location_id]\",\"stringMap[buyer_geo_location]\",\"stringMap[geo_loc_lat_lng]\",\"stringMap[locale]\",\"stringMap[component_name]\",\"stringMap[page_name]\",\"stringMap[page_group]\",\"stringMap[os]\",\"stringMap[browser_version]\",\"stringMap[browser_type]\",\"stringMap[account_type]\",\"stringMap[decr_account_number]\",\"stringMap[decr_merchant_account_number]\",\"stringMap[decr_transaction_id]\",\"stringMap[device_id]\",\"stringMap[device]\",\"longMap[ts_rest_receive]\",\"stringMap[mobile_device_name]\",\"stringMap[user_logged_in]\",\"stringMap[geo_city]\",\"stringMap[geo_cntry_code]\",\"stringMap[channel_defined]\",\"stringMap[flow_token]\",\"stringMap[visitor_id]\",\"stringMap[cookie_id]\",\"booleanMap[bot]\",\"stringMap[enrich]\",\"stringMap[customer_id]\",\"stringMap[event_identifier]\",\"stringMap[framework_call_type]\",\"stringMap[eventDateTime]\",\"stringMap[eventDate]\",\"stringMap[eventHr]\",\"stringMap[eventMin]\",\"intArrayMap[experimentation_experience]\",\"intArrayMap[experimentation_treatment]\",\"intArrayMap[server_experienced_experiment]\",\"intArrayMap[server_experienced_treatment]\",\"intArrayMap[qual_experiments]\",\"intArrayMap[qual_treatments]\",\"intArrayMap[qual_context]\",\"intArrayMap[override_experiment]\",\"intArrayMap[hash_mod_100]\",\"stringArrayMap[expmntNames]\",\"stringArrayMap[treatmentNames]\",\"doubleArrayMap[experimentVersions]\",\"doubleArrayMap[treatmentVersions]\",\"doubleArrayMap[treatmentSpectPcnts]\",\"intArrayMap[experimentScope]\",\"intArrayMap[experimentStatus]\"]}",
++        "parseSpec": {
++          "format": "timeAndDims",
++          "timestampSpec": {
++            "column": "timestamp",
++            "format": "millis"
++          },
++          "dimensionsSpec": {
++            "dimensions": [
++              "geo_location_id",
++              "buyer_geo_location",
++              "geo_loc_lat_lng",
++              "locale",
++              "component_name",
++              "page_name",
++              "page_group",
++              "os",
++              "browser_version",
++              "browser_type",
++              "account_type",
++              "device_id",
++              "device",
++              "ts_rest_receive",
++              "mobile_device_name",
++              "user_logged_in",
++              "geo_city",
++              "geo_cntry_code",
++              "channel_defined",
++              "flow_token",
++              "bot",
++              "enrich",
++              "experimentation_experience",
++              "experimentation_treatment",
++              "server_experienced_experiment",
++              "server_experienced_treatment",
++              "qual_experiments",
++              "qual_treatments",
++              "qual_context",
++              "override_experiment",
++              "override_treatment",
++              "customer_id",
++              "event_identifier",
++              "framework_call_type",
++              "hash_mod_100",
++              "expmntNames",
++              "treatmentNames",
++              "experimentVersions",
++              "treatmentVersions",
++              "treatmentSpectPcnts",
++              "experimentScope",
++              "experimentStatus",
++              "timestamp",
++              "eventDateTime",
++              "eventDate",
++              "eventHr",
++              "eventMin"
++            ],
++            "dimensionExclusions": [],
++            "spatialDimensions": []
++          }
++        }
++      },
++      "metricsSpec": [
++        {
++          "type":"count",
++          "name":"count"
++        },
++        {
++          "type":"hyperUnique",
++          "name":"dist_visits",
++          "fieldName":"visitor_id"
++        },
++        {
++          "type":"hyperUnique",
++          "name":"dist_visitors",
++          "fieldName":"cookie_id"
++        },
++        {
++          "type":"hyperUnique",
++          "name":"dist_users",
++          "fieldName":"decr_account_number"
++        },
++        {
++          "type":"hyperUnique",
++          "name":"dist_merchants",
++          "fieldName":"decr_merchant_account_number"
++        },
++        {
++          "type":"hyperUnique",
++          "name":"dist_transactions",
++          "fieldName":"decr_transaction_id"
++        }
++      ],
++      "granularitySpec": {
++        "type": "uniform",
++        "segmentGranularity": "DAY",
++        "queryGranularity": "NONE",
++        "intervals": [
++          "2016-10-26/2016-10-27"
++        ]
++      }
++    },
++    "tuningConfig": {
++      "type": "hadoop",
++      "workingPath": "tmp/working_path",
++      "partitionsSpec": {
++        "targetPartitionSize": 5000000
++      },
++      "jobProperties": {
++        "mapreduce.map.java.opts": "-server -Duser.timezone=UTC -Dfile.encoding=UTF-8 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps",
++        "mapreduce.reduce.java.opts": "-server -Duser.timezone=UTC -Dfile.encoding=UTF-8 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps",
++        "mapred.child.java.opts": "-server -XX:+PrintGCDetails -XX:+PrintGCTimeStamps"
++      },
++      "leaveIntermediate": true
++    }
++  }
++}
+diff --git a/extensions-contrib/parquet-extensions/example/map_empty_attrs_hadoop_parquet_job.json b/extensions-contrib/parquet-extensions/example/map_empty_attrs_hadoop_parquet_job.json
+new file mode 100644
+index 0000000..5b92792
+--- /dev/null
++++ b/extensions-contrib/parquet-extensions/example/map_empty_attrs_hadoop_parquet_job.json
+@@ -0,0 +1,83 @@
++{
++  "type": "index_hadoop",
++  "spec": {
++    "ioConfig": {
++      "type": "hadoop",
++      "inputSpec": {
++        "type": "static",
++        "inputFormat": "io.druid.data.input.parquet.DruidParquetInputFormat",
++        "paths": "example/clAndServer/eventDate=2016-10-31/eventHr=11/eventMin=00/part-r-00000-7aef8936-db5d-4276-8952-e6821fe4e742.gz.parquet"
++      },
++      "metadataUpdateSpec": {
++        "type": "postgresql",
++        "connectURI": "jdbc:postgresql://localhost/druid",
++        "user": "druid",
++        "password": "asdf",
++        "segmentTable": "druid_segments"
++      },
++      "segmentOutputPath": "/tmp/segments"
++    },
++    "dataSchema": {
++      "dataSource": "elmo_server",
++      "parser": {
++        "type": "parquet",
++        "binaryAsString": true,
++        "parquetParser": "{\"fields\":[\"timestamp\",\"loadDateTime\",\"stringMap[eventDate]\",\"stringMap[framework_call_type]\",\"intArrayMap[qual_experiments]\",\"intArrayMap[qual_treatments]\",\"intArrayMap[experienced_experiment]\",\"intArrayMap[experienced_treatment]\",\"booleanMap[bot]\",\"stringMap[cookie_id]\",\"stringArrayMap[expmntNames]\"]}",
++        "parseSpec": {
++          "format": "timeAndDims",
++          "timestampSpec": {
++            "column": "timestamp",
++            "format": "millis"
++          },
++          "dimensionsSpec": {
++            "dimensions": [
++              "loadDateTime",
++              "eventDate",
++              "framework_call_type",
++              "qual_experiments",
++              "qual_treatments",
++              "server_experienced_experiment",
++              "server_experienced_treatment",
++              "bot",
++              "exptNames"
++            ],
++            "dimensionExclusions": [],
++            "spatialDimensions": []
++          }
++        }
++      },
++      "metricsSpec": [
++        {
++          "type": "count",
++          "name": "count"
++        },
++        {
++          "type": "hyperUnique",
++          "name": "dist_visitor_cnt",
++          "fieldName": "cookie_id"
++        }
++      ],
++      "granularitySpec": {
++        "type": "uniform",
++        "segmentGranularity": "DAY",
++        "queryGranularity": "NONE",
++        "intervals": [
++          "2016-10-26/2016-10-27"
++        ]
++      }
++    },
++    "tuningConfig": {
++      "type": "hadoop",
++      "workingPath": "tmp/working_path",
++      "partitionsSpec": {
++        "targetPartitionSize": 5000000
++      },
++      "jobProperties": {
++        "mapreduce.map.java.opts": "-server -Duser.timezone=UTC -Dfile.encoding=UTF-8 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps",
++        "mapreduce.reduce.java.opts": "-server -Duser.timezone=UTC -Dfile.encoding=UTF-8 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps",
++        "mapred.child.java.opts": "-server -XX:+PrintGCDetails -XX:+PrintGCTimeStamps"
++      },
++      "leaveIntermediate": true
++    }
++  }
++}
+diff --git a/extensions-contrib/parquet-extensions/example/map_parser_hadoop_parquet_job.json b/extensions-contrib/parquet-extensions/example/map_parser_hadoop_parquet_job.json
+new file mode 100644
+index 0000000..18aff04
+--- /dev/null
++++ b/extensions-contrib/parquet-extensions/example/map_parser_hadoop_parquet_job.json
+@@ -0,0 +1,82 @@
++{
++  "type": "index_hadoop",
++  "spec": {
++    "ioConfig": {
++      "type": "hadoop",
++      "inputSpec": {
++        "type": "static",
++        "inputFormat": "io.druid.data.input.parquet.DruidParquetInputFormat",
++        "paths": "example/parquet/eventDate=2016-10-26/eventHr=00/eventMin=59/part-r-00001-5cee230c-bc2d-4344-a427-c995c284f0e3.gz.parquet"
++      },
++      "metadataUpdateSpec": {
++        "type": "postgresql",
++        "connectURI": "jdbc:postgresql://localhost/druid",
++        "user": "druid",
++        "password": "asdf",
++        "segmentTable": "druid_segments"
++      },
++      "segmentOutputPath": "/tmp/segments"
++    },
++    "dataSchema": {
++      "dataSource": "elmo_server",
++      "parser": {
++        "type": "parquet",
++        "binaryAsString": true,
++        "parquetParser": "{\"fields\":[\"timestamp\",\"loadDateTime\",\"stringMap[eventDate]\",\"stringMap[framework_call_type]\",\"intArrayMap[qual_experiments]\",\"intArrayMap[qual_treatments]\",\"intArrayMap[server_experienced_experiment]\",\"intArrayMap[server_experienced_treatment]\",\"booleanMap[bot]\",\"stringMap[cookie_id]\"]}",
++        "parseSpec": {
++          "format": "timeAndDims",
++          "timestampSpec": {
++            "column": "timestamp",
++            "format": "millis"
++          },
++          "dimensionsSpec": {
++            "dimensions": [
++              "loadDateTime",
++              "eventDate",
++              "framework_call_type",
++              "qual_experiments",
++              "qual_treatments",
++              "server_experienced_experiment",
++              "server_experienced_treatment",
++              "bot"
++            ],
++            "dimensionExclusions": [],
++            "spatialDimensions": []
++          }
++        }
++      },
++      "metricsSpec": [
++        {
++          "type": "count",
++          "name": "count"
++        },
++        {
++          "type": "hyperUnique",
++          "name": "dist_visitor_cnt",
++          "fieldName": "cookie_id"
++        }
++      ],
++      "granularitySpec": {
++        "type": "uniform",
++        "segmentGranularity": "DAY",
++        "queryGranularity": "NONE",
++        "intervals": [
++          "2016-10-26/2016-10-27"
++        ]
++      }
++    },
++    "tuningConfig": {
++      "type": "hadoop",
++      "workingPath": "tmp/working_path",
++      "partitionsSpec": {
++        "targetPartitionSize": 5000000
++      },
++      "jobProperties": {
++        "mapreduce.map.java.opts": "-server -Duser.timezone=UTC -Dfile.encoding=UTF-8 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps",
++        "mapreduce.reduce.java.opts": "-server -Duser.timezone=UTC -Dfile.encoding=UTF-8 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps",
++        "mapred.child.java.opts": "-server -XX:+PrintGCDetails -XX:+PrintGCTimeStamps"
++      },
++      "leaveIntermediate": true
++    }
++  }
++}
+diff --git a/extensions-contrib/parquet-extensions/example/parquet/._SUCCESS.crc b/extensions-contrib/parquet-extensions/example/parquet/._SUCCESS.crc
+new file mode 100644
+index 0000000..3b7b044
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/parquet/._SUCCESS.crc differ
+diff --git a/extensions-contrib/parquet-extensions/example/parquet/._common_metadata.crc b/extensions-contrib/parquet-extensions/example/parquet/._common_metadata.crc
+new file mode 100644
+index 0000000..16b9f84
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/parquet/._common_metadata.crc differ
+diff --git a/extensions-contrib/parquet-extensions/example/parquet/._metadata.crc b/extensions-contrib/parquet-extensions/example/parquet/._metadata.crc
+new file mode 100644
+index 0000000..f3b313e
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/parquet/._metadata.crc differ
+diff --git a/extensions-contrib/parquet-extensions/example/parquet/_SUCCESS b/extensions-contrib/parquet-extensions/example/parquet/_SUCCESS
+new file mode 100644
+index 0000000..e69de29
+diff --git a/extensions-contrib/parquet-extensions/example/parquet/_common_metadata b/extensions-contrib/parquet-extensions/example/parquet/_common_metadata
+new file mode 100644
+index 0000000..f8c719d
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/parquet/_common_metadata differ
+diff --git a/extensions-contrib/parquet-extensions/example/parquet/_metadata b/extensions-contrib/parquet-extensions/example/parquet/_metadata
+new file mode 100644
+index 0000000..f5916e9
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/parquet/_metadata differ
+diff --git a/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/.part-r-00001-b0b86a13-1a3e-45d7-aee7-313966cfa046.gz.parquet.crc b/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/.part-r-00001-b0b86a13-1a3e-45d7-aee7-313966cfa046.gz.parquet.crc
+new file mode 100644
+index 0000000..09358f8
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/.part-r-00001-b0b86a13-1a3e-45d7-aee7-313966cfa046.gz.parquet.crc differ
+diff --git a/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/.part-r-00003-b0b86a13-1a3e-45d7-aee7-313966cfa046.gz.parquet.crc b/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/.part-r-00003-b0b86a13-1a3e-45d7-aee7-313966cfa046.gz.parquet.crc
+new file mode 100644
+index 0000000..31dc6c6
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/.part-r-00003-b0b86a13-1a3e-45d7-aee7-313966cfa046.gz.parquet.crc differ
+diff --git a/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/eventMin=59/.part-r-00001-5cee230c-bc2d-4344-a427-c995c284f0e3.gz.parquet.crc b/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/eventMin=59/.part-r-00001-5cee230c-bc2d-4344-a427-c995c284f0e3.gz.parquet.crc
+new file mode 100644
+index 0000000..e210198
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/eventMin=59/.part-r-00001-5cee230c-bc2d-4344-a427-c995c284f0e3.gz.parquet.crc differ
+diff --git a/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/eventMin=59/.part-r-00003-5cee230c-bc2d-4344-a427-c995c284f0e3.gz.parquet.crc b/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/eventMin=59/.part-r-00003-5cee230c-bc2d-4344-a427-c995c284f0e3.gz.parquet.crc
+new file mode 100644
+index 0000000..c418cee
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/eventMin=59/.part-r-00003-5cee230c-bc2d-4344-a427-c995c284f0e3.gz.parquet.crc differ
+diff --git a/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/eventMin=59/part-r-00001-5cee230c-bc2d-4344-a427-c995c284f0e3.gz.parquet b/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/eventMin=59/part-r-00001-5cee230c-bc2d-4344-a427-c995c284f0e3.gz.parquet
+new file mode 100644
+index 0000000..e4f86c0
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/eventMin=59/part-r-00001-5cee230c-bc2d-4344-a427-c995c284f0e3.gz.parquet differ
+diff --git a/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/eventMin=59/part-r-00003-5cee230c-bc2d-4344-a427-c995c284f0e3.gz.parquet b/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/eventMin=59/part-r-00003-5cee230c-bc2d-4344-a427-c995c284f0e3.gz.parquet
+new file mode 100644
+index 0000000..66e66c4
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/eventMin=59/part-r-00003-5cee230c-bc2d-4344-a427-c995c284f0e3.gz.parquet differ
+diff --git a/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/part-r-00001-b0b86a13-1a3e-45d7-aee7-313966cfa046.gz.parquet b/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/part-r-00001-b0b86a13-1a3e-45d7-aee7-313966cfa046.gz.parquet
+new file mode 100644
+index 0000000..2e752ea
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/part-r-00001-b0b86a13-1a3e-45d7-aee7-313966cfa046.gz.parquet differ
+diff --git a/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/part-r-00003-b0b86a13-1a3e-45d7-aee7-313966cfa046.gz.parquet b/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/part-r-00003-b0b86a13-1a3e-45d7-aee7-313966cfa046.gz.parquet
+new file mode 100644
+index 0000000..3a52395
+Binary files /dev/null and b/extensions-contrib/parquet-extensions/example/parquet/eventDate=2016-10-26/eventHr=00/part-r-00003-b0b86a13-1a3e-45d7-aee7-313966cfa046.gz.parquet differ
+diff --git a/extensions-contrib/parquet-extensions/src/main/java/io/druid/data/input/parquet/JsonUtils.java b/extensions-contrib/parquet-extensions/src/main/java/io/druid/data/input/parquet/JsonUtils.java
+new file mode 100644
+index 0000000..009494e
+--- /dev/null
++++ b/extensions-contrib/parquet-extensions/src/main/java/io/druid/data/input/parquet/JsonUtils.java
+@@ -0,0 +1,13 @@
++package io.druid.data.input.parquet;
++
++import com.google.gson.Gson;
++
++/**
++ * Created by sathsrinivasan on 11/4/16.
++ */
++public class JsonUtils {
++
++    public static final <T> T readFrom(String json, Class<T> t) {
++        return new Gson().fromJson(json, t);
++    }
++}
+diff --git a/extensions-contrib/parquet-extensions/src/main/java/io/druid/data/input/parquet/ParquetHadoopInputRowParser.java b/extensions-contrib/parquet-extensions/src/main/java/io/druid/data/input/parquet/ParquetHadoopInputRowParser.java
+index c587595..d256eca 100755
+--- a/extensions-contrib/parquet-extensions/src/main/java/io/druid/data/input/parquet/ParquetHadoopInputRowParser.java
++++ b/extensions-contrib/parquet-extensions/src/main/java/io/druid/data/input/parquet/ParquetHadoopInputRowParser.java
+@@ -21,63 +21,127 @@ package io.druid.data.input.parquet;
+ import com.fasterxml.jackson.annotation.JsonCreator;
+ import com.fasterxml.jackson.annotation.JsonProperty;
+ import com.google.common.collect.Lists;
++import com.google.common.collect.Maps;
+ import io.druid.data.input.AvroStreamInputRowParser;
+ import io.druid.data.input.InputRow;
+ import io.druid.data.input.MapBasedInputRow;
+-import io.druid.data.input.avro.GenericRecordAsMap;
+ import io.druid.data.input.impl.DimensionSchema;
+ import io.druid.data.input.impl.InputRowParser;
+ import io.druid.data.input.impl.ParseSpec;
+ import io.druid.data.input.impl.TimestampSpec;
++import io.druid.data.input.parquet.model.Field;
++import io.druid.data.input.parquet.model.FieldType;
++import io.druid.data.input.parquet.model.ParquetParser;
+ import org.apache.avro.generic.GenericRecord;
++import org.apache.avro.util.Utf8;
+ import org.joda.time.DateTime;
+ 
++import java.util.ArrayList;
++import java.util.HashMap;
+ import java.util.List;
++import java.util.Map;
+ 
+-public class ParquetHadoopInputRowParser implements InputRowParser<GenericRecord>
+-{
+-  private final ParseSpec parseSpec;
+-  private final boolean binaryAsString;
+-  private final List<String> dimensions;
++public class ParquetHadoopInputRowParser implements InputRowParser<GenericRecord> {
++    private final ParseSpec parseSpec;
++    private final boolean binaryAsString;
++    private final List<String> dimensions;
++    private final String parquetParserString;
++    private final ParquetParser parquetParser;
++    private static final String EMPTY_STRING = "";
+ 
+-  @JsonCreator
+-  public ParquetHadoopInputRowParser(
+-      @JsonProperty("parseSpec") ParseSpec parseSpec,
+-      @JsonProperty("binaryAsString") Boolean binaryAsString
+-  )
+-  {
+-    this.parseSpec = parseSpec;
+-    this.binaryAsString = binaryAsString == null ? false : binaryAsString;
++    @JsonCreator
++    public ParquetHadoopInputRowParser(
++            @JsonProperty("parseSpec") ParseSpec parseSpec,
++            @JsonProperty("binaryAsString") Boolean binaryAsString,
++            @JsonProperty("parquetParser") String parquetParserString
++    ) {
++        this.parseSpec = parseSpec;
++        this.binaryAsString = binaryAsString == null ? false : binaryAsString;
++        this.parquetParserString = parquetParserString;
++        this.parquetParser = parquetParserString == null ? null :
++                JsonUtils.readFrom(parquetParserString, ParquetParser.class);
++        this.parquetParser.setParsedFields(Field.parseFields(this.parquetParser.getFields()));
+ 
+-    List<DimensionSchema> dimensionSchema = parseSpec.getDimensionsSpec().getDimensions();
+-    this.dimensions = Lists.newArrayList();
+-    for (DimensionSchema dim : dimensionSchema) {
+-      this.dimensions.add(dim.getName());
++        List<DimensionSchema> dimensionSchema = parseSpec.getDimensionsSpec().getDimensions();
++        this.dimensions = Lists.newArrayList();
++        for (DimensionSchema dim : dimensionSchema) {
++            this.dimensions.add(dim.getName());
++        }
+     }
+-  }
+ 
+-  /**
+-   * imitate avro extension {@link AvroStreamInputRowParser#parseGenericRecord(GenericRecord, ParseSpec, List, boolean, boolean)}
+-   */
+-  @Override
+-  public InputRow parse(GenericRecord record)
+-  {
+-    GenericRecordAsMap genericRecordAsMap = new GenericRecordAsMap(record, false, binaryAsString);
+-    TimestampSpec timestampSpec = parseSpec.getTimestampSpec();
+-    DateTime dateTime = timestampSpec.extractTimestamp(genericRecordAsMap);
+-    return new MapBasedInputRow(dateTime, dimensions, genericRecordAsMap);
+-  }
++    /**
++     * imitate avro extension {@link AvroStreamInputRowParser#parseGenericRecord(GenericRecord, ParseSpec, List, boolean, boolean)}
++     */
++    @Override
++    public InputRow parse(GenericRecord record) {
++//        GenericRecordAsMap genericRecordAsMap = new GenericRecordAsMap(record, false, binaryAsString);
++        final Map<String, Object> event = getEvent(this.parquetParser.getParsedFields(), record);
++        TimestampSpec timestampSpec = parseSpec.getTimestampSpec();
++        DateTime dateTime = timestampSpec.extractTimestamp(event);
++        return new MapBasedInputRow(dateTime, dimensions, event);
++    }
++
++
++    public final Map<String, Object> getEvent(final List<Field> fields, GenericRecord record) {
++        final Map<String, Object> event = Maps.newHashMap();
++        for (Field field : fields) {
++            if (FieldType.MAP.equals(field.getFieldType())) {
++                event.put(field.getKey().toString(),
++                        processRecord(((Map<String, Object>) record.
++                                get(field.getRootFieldName())).get(field.getKey())));
++            } else if (FieldType.ARRAY.equals(field.getFieldType())) {
++                event.put(field.getKey().toString(),
++                        processRecord(((List<Object>) record.
++                                get(field.getRootFieldName())).get(field.getIndex())));
++            } else {
++                event.put(field.getRootFieldName(), processRecord(record.get(field.getRootFieldName())));
++            }
++        }
++        return event;
++    }
++
++    public static final Object processRecord(Object obj) {
++//        if (obj != null) {
++            if (obj instanceof Utf8) {
++                return obj.toString();
++            } else if (obj instanceof List) {
++                ArrayList list = new ArrayList();
++                for (Object value : (List) obj) {
++                    if (value instanceof GenericRecord)
++                        list.add(((GenericRecord) value).get(0));
++                }
++                return list;
++            } else if (obj instanceof Map) {
++                Map map = new HashMap();
++                Map incomingMap = (Map) obj;
++                for (Object key : incomingMap.keySet()) {
++                    map.put(key, incomingMap.get(key));
++                }
++                return map;
++            }
++            return obj;
++//        } else {
++//            //Handling for dimensions with Empty event attributes
++//            return EMPTY_STRING;
++//        }
++    }
+ 
+-  @JsonProperty
+-  @Override
+-  public ParseSpec getParseSpec()
+-  {
+-    return parseSpec;
+-  }
++    @JsonProperty
++    @Override
++    public ParseSpec getParseSpec() {
++        return parseSpec;
++    }
++
++    @Override
++    public InputRowParser withParseSpec(ParseSpec parseSpec) {
++        return new ParquetHadoopInputRowParser(parseSpec, binaryAsString, parquetParserString);
++    }
+ 
+-  @Override
+-  public InputRowParser withParseSpec(ParseSpec parseSpec)
+-  {
+-    return new ParquetHadoopInputRowParser(parseSpec, binaryAsString);
+-  }
++    public String getParquetParserString() {
++        return parquetParserString;
++    }
++
++    public ParquetParser getParquetParser() {
++        return parquetParser;
++    }
+ }
+diff --git a/extensions-contrib/parquet-extensions/src/main/java/io/druid/data/input/parquet/RecordProcessor.java b/extensions-contrib/parquet-extensions/src/main/java/io/druid/data/input/parquet/RecordProcessor.java
+new file mode 100644
+index 0000000..e5ceabb
+--- /dev/null
++++ b/extensions-contrib/parquet-extensions/src/main/java/io/druid/data/input/parquet/RecordProcessor.java
+@@ -0,0 +1,10 @@
++package io.druid.data.input.parquet;
++
++/**
++ * Created by sathsrinivasan on 11/6/16.
++ */
++public enum RecordProcessor {
++    INT_LIST
++
++//    public st
++}
+diff --git a/extensions-contrib/parquet-extensions/src/main/java/io/druid/data/input/parquet/model/Field.java b/extensions-contrib/parquet-extensions/src/main/java/io/druid/data/input/parquet/model/Field.java
+new file mode 100644
+index 0000000..7cf0916
+--- /dev/null
++++ b/extensions-contrib/parquet-extensions/src/main/java/io/druid/data/input/parquet/model/Field.java
+@@ -0,0 +1,111 @@
++package io.druid.data.input.parquet.model;
++
++import com.google.common.base.Preconditions;
++import com.google.common.collect.Lists;
++import org.apache.avro.util.Utf8;
++import org.apache.commons.lang3.StringUtils;
++
++import java.util.List;
++import java.util.regex.Matcher;
++import java.util.regex.Pattern;
++
++/**
++ * Created by sathsrinivasan on 11/4/16.
++ */
++public final class Field {
++
++    public static final Utf8 EMPTY_STR = new Utf8("");
++    public static final int DEF_INDEX = -1;
++
++    private final String rootFieldName;
++    private final int index;
++    private final Utf8 key;
++    private final FieldType fieldType;
++
++    private Field(String rootFieldName, int index, Utf8 key, FieldType fieldType) {
++        this.rootFieldName = rootFieldName;
++        this.index = index;
++        this.key = key;
++        this.fieldType = fieldType;
++    }
++
++    public String getRootFieldName() {
++        return rootFieldName;
++    }
++
++    public int getIndex() {
++        return index;
++    }
++
++    public Utf8 getKey() {
++        return key;
++    }
++
++    public FieldType getFieldType() {
++        return fieldType;
++    }
++
++    private static final Pattern SQUARE_PATTERN = Pattern.compile("\\[(.*?)\\]");
++    private static final Pattern CURLY_PATTERN = Pattern.compile("\\((.*?)\\)");
++
++    public static final Field parseField(String field) {
++        Preconditions.checkNotNull(field, "Nullable field not expected while parsing field");
++        if (field.contains("[")) {
++            return new Field(field.substring(0, field.indexOf("[")), -1,
++                    extractKey(SQUARE_PATTERN, field), FieldType.MAP);
++        } else if (field.contains(("("))) {
++            final Utf8 key = extractKey(CURLY_PATTERN, field);
++            if (StringUtils.isNumeric(key)) {
++                return new Field(field.substring(0, field.indexOf("(")), Integer.parseInt(key.toString()),
++                        key, FieldType.MAP);
++            } else {
++                return new Field(field.substring(0, field.indexOf("(")), -1,
++                        key, FieldType.MAP);
++            }
++        } else {
++            return new Field(field, DEF_INDEX, EMPTY_STR, FieldType.STRING);
++        }
++    }
++
++    public static final List<Field> parseFields(List<String> fields) {
++        final List<Field> parsedFields = Lists.newArrayList();
++        if (fields != null && !fields.isEmpty()) {
++            for (String field : fields) {
++                parsedFields.add(parseField(field));
++            }
++        }
++        return parsedFields;
++    }
++
++    public static final Utf8 extractKey(Pattern pattern, String field) {
++        final Matcher matcher = pattern.matcher(field);
++        while (matcher.find()) {
++            return new Utf8(matcher.group(1));
++        }
++        return EMPTY_STR;
++    }
++
++    @Override
++    public boolean equals(Object o) {
++        if (this == o) return true;
++        if (o == null || getClass() != o.getClass()) return false;
++
++        Field field = (Field) o;
++
++        if (index != field.index) return false;
++        if (rootFieldName != null ? !rootFieldName.equals(field.rootFieldName) : field.rootFieldName != null)
++            return false;
++        if (key != null ? !key.equals(field.key) : field.key != null) return false;
++        return fieldType == field.fieldType;
++
++    }
++
++    @Override
++    public int hashCode() {
++        int result = rootFieldName != null ? rootFieldName.hashCode() : 0;
++        result = 31 * result + index;
++        result = 31 * result + (key != null ? key.hashCode() : 0);
++        result = 31 * result + (fieldType != null ? fieldType.hashCode() : 0);
++        return result;
++    }
++}
+diff --git a/extensions-contrib/parquet-extensions/src/main/java/io/druid/data/input/parquet/model/FieldType.java b/extensions-contrib/parquet-extensions/src/main/java/io/druid/data/input/parquet/model/FieldType.java
+new file mode 100644
+index 0000000..fd008ad
+--- /dev/null
++++ b/extensions-contrib/parquet-extensions/src/main/java/io/druid/data/input/parquet/model/FieldType.java
+@@ -0,0 +1,8 @@
++package io.druid.data.input.parquet.model;
++
++/**
++ * Created by sathsrinivasan on 11/4/16.
++ */
++public enum FieldType {
++    STRING, MAP, ARRAY, LONG
++}
+diff --git a/extensions-contrib/parquet-extensions/src/main/java/io/druid/data/input/parquet/model/ParquetParser.java b/extensions-contrib/parquet-extensions/src/main/java/io/druid/data/input/parquet/model/ParquetParser.java
+new file mode 100644
+index 0000000..e217b87
+--- /dev/null
++++ b/extensions-contrib/parquet-extensions/src/main/java/io/druid/data/input/parquet/model/ParquetParser.java
+@@ -0,0 +1,37 @@
++package io.druid.data.input.parquet.model;
++
++import java.util.List;
++
++/**
++ * Created by sathsrinivasan on 11/4/16.
++ */
++public class ParquetParser {
++
++    private List<String> fields;
++
++    public List<String> getFields() {
++        return fields;
++    }
++
++    public void setFields(List<String> fields) {
++        this.fields = fields;
++    }
++
++    private transient List<Field> parsedFields;
++
++    public List<Field> getParsedFields() {
++        return parsedFields;
++    }
++
++    public void setParsedFields(List<Field> parsedFields) {
++        this.parsedFields = parsedFields;
++    }
++
++    public boolean containsType(String typeName) {
++        for (Field field : this.getParsedFields()) {
++            if (field.getRootFieldName().equals(typeName))
++                return true;
++        }
++        return false;
++    }
++}
+diff --git a/extensions-contrib/parquet-extensions/src/main/java/org/apache/parquet/avro/DruidParquetReadSupport.java b/extensions-contrib/parquet-extensions/src/main/java/org/apache/parquet/avro/DruidParquetReadSupport.java
+index 36cf7a1..79fb9eb 100755
+--- a/extensions-contrib/parquet-extensions/src/main/java/org/apache/parquet/avro/DruidParquetReadSupport.java
++++ b/extensions-contrib/parquet-extensions/src/main/java/org/apache/parquet/avro/DruidParquetReadSupport.java
+@@ -22,9 +22,10 @@ package org.apache.parquet.avro;
+ import com.google.common.collect.Lists;
+ import com.google.common.collect.Sets;
+ import io.druid.data.input.impl.DimensionSchema;
++import io.druid.data.input.parquet.ParquetHadoopInputRowParser;
++import io.druid.data.input.parquet.model.ParquetParser;
+ import io.druid.indexer.HadoopDruidIndexerConfig;
+ import io.druid.query.aggregation.AggregatorFactory;
+-import io.druid.query.aggregation.CountAggregatorFactory;
+ import org.apache.avro.Schema;
+ import org.apache.avro.generic.GenericRecord;
+ import org.apache.hadoop.conf.Configuration;
+@@ -38,65 +39,72 @@ import java.util.List;
+ import java.util.Map;
+ import java.util.Set;
+ 
+-public class DruidParquetReadSupport extends AvroReadSupport<GenericRecord>
+-{
+-  private MessageType getPartialReadSchema(InitContext context)
+-  {
+-    MessageType fullSchema = context.getFileSchema();
+-
+-    String name = fullSchema.getName();
+-
+-    HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromConfiguration(context.getConfiguration());
+-    String tsField = config.getParser().getParseSpec().getTimestampSpec().getTimestampColumn();
+-
+-    List<DimensionSchema> dimensionSchema = config.getParser().getParseSpec().getDimensionsSpec().getDimensions();
+-    Set<String> dimensions = Sets.newHashSet();
+-    for (DimensionSchema dim : dimensionSchema) {
+-      dimensions.add(dim.getName());
++public class DruidParquetReadSupport extends AvroReadSupport<GenericRecord> {
++    private MessageType getPartialReadSchema(InitContext context) {
++        MessageType fullSchema = context.getFileSchema();
++
++        String name = fullSchema.getName();
++
++        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromConfiguration(context.getConfiguration());
++        String tsField = config.getParser().getParseSpec().getTimestampSpec().getTimestampColumn();
++
++        List<DimensionSchema> dimensionSchema = config.getParser().getParseSpec().getDimensionsSpec().getDimensions();
++        Set<String> dimensions = Sets.newHashSet();
++        for (DimensionSchema dim : dimensionSchema) {
++            dimensions.add(dim.getName());
++        }
++
++        Set<String> metricsFields = Sets.newHashSet();
++        for (AggregatorFactory agg : config.getSchema().getDataSchema().getAggregators()) {
++            metricsFields.addAll(agg.requiredFields());
++        }
++
++        List<Type> partialFields = Lists.newArrayList();
++        final ParquetParser parquetParser = ((ParquetHadoopInputRowParser) config.getParser()).getParquetParser();
++
++        //Checking on parquet parsers root field name
++        if (parquetParser != null) {
++            for (Type type : fullSchema.getFields()) {
++                if (tsField.equals(type.getName())
++                        || parquetParser.containsType(type.getName())) {
++                    partialFields.add(type);
++                }
++            }
++        }
++
++        /*for (Type type : fullSchema.getFields()) {
++            if (tsField.equals(type.getName())
++                    || metricsFields.contains(type.getName())
++                    || dimensions.size() > 0 && contains(dimensions, type.getName())
++                    || dimensions.size() == 0) {
++                partialFields.add(type);
++            }
++        }*/
++
++        return new MessageType(name, partialFields);
+     }
+ 
+-    Set<String> metricsFields = Sets.newHashSet();
+-    for (AggregatorFactory agg : config.getSchema().getDataSchema().getAggregators()) {
+-      metricsFields.addAll(agg.requiredFields());
++    public ReadContext init(InitContext context) {
++        MessageType requestedProjection = getSchemaForRead(context.getFileSchema(), getPartialReadSchema(context));
++        return new ReadContext(requestedProjection);
+     }
+ 
+-    List<Type> partialFields = Lists.newArrayList();
+-
+-    for (Type type : fullSchema.getFields()) {
+-      if (tsField.equals(type.getName())
+-          || metricsFields.contains(type.getName())
+-          || dimensions.size() > 0 && dimensions.contains(type.getName())
+-          || dimensions.size() == 0) {
+-        partialFields.add(type);
+-      }
++    @Override
++    public RecordMaterializer<GenericRecord> prepareForRead(
++            Configuration configuration, Map<String, String> keyValueMetaData,
++            MessageType fileSchema, ReadContext readContext
++    ) {
++
++        MessageType parquetSchema = readContext.getRequestedSchema();
++        Schema avroSchema = new AvroSchemaConverter(configuration).convert(parquetSchema);
++
++        Class<? extends AvroDataSupplier> suppClass = configuration.getClass(
++                AVRO_DATA_SUPPLIER,
++                SpecificDataSupplier.class,
++                AvroDataSupplier.class
++        );
++        AvroDataSupplier supplier = ReflectionUtils.newInstance(suppClass, configuration);
++        return new AvroRecordMaterializer<GenericRecord>(parquetSchema, avroSchema, supplier.get());
+     }
+ 
+-    return new MessageType(name, partialFields);
+-  }
+-
+-  public ReadContext init(InitContext context)
+-  {
+-    MessageType requestedProjection = getSchemaForRead(context.getFileSchema(), getPartialReadSchema(context));
+-    return new ReadContext(requestedProjection);
+-  }
+-
+-  @Override
+-  public RecordMaterializer<GenericRecord> prepareForRead(
+-      Configuration configuration, Map<String, String> keyValueMetaData,
+-      MessageType fileSchema, ReadContext readContext
+-  )
+-  {
+-
+-    MessageType parquetSchema = readContext.getRequestedSchema();
+-    Schema avroSchema = new AvroSchemaConverter(configuration).convert(parquetSchema);
+-
+-    Class<? extends AvroDataSupplier> suppClass = configuration.getClass(
+-        AVRO_DATA_SUPPLIER,
+-        SpecificDataSupplier.class,
+-        AvroDataSupplier.class
+-    );
+-    AvroDataSupplier supplier = ReflectionUtils.newInstance(suppClass, configuration);
+-    return new AvroRecordMaterializer<GenericRecord>(parquetSchema, avroSchema, supplier.get());
+-  }
+-
+ }
+diff --git a/extensions-contrib/parquet-extensions/src/test/java/io/druid/data/input/parquet/DruidParquetInputTest.java b/extensions-contrib/parquet-extensions/src/test/java/io/druid/data/input/parquet/DruidParquetInputTest.java
+index b604c9a..252f1e8 100644
+--- a/extensions-contrib/parquet-extensions/src/test/java/io/druid/data/input/parquet/DruidParquetInputTest.java
++++ b/extensions-contrib/parquet-extensions/src/test/java/io/druid/data/input/parquet/DruidParquetInputTest.java
+@@ -18,10 +18,7 @@
+  */
+ package io.druid.data.input.parquet;
+ 
+-import com.google.common.collect.ImmutableMap;
+-import com.google.common.collect.Maps;
+ import io.druid.data.input.InputRow;
+-import io.druid.data.input.impl.InputRowParser;
+ import io.druid.indexer.HadoopDruidIndexerConfig;
+ import io.druid.indexer.path.StaticPathSpec;
+ import org.apache.avro.generic.GenericRecord;
+@@ -35,68 +32,99 @@ import org.apache.hadoop.mapreduce.TaskAttemptID;
+ import org.apache.hadoop.mapreduce.lib.input.FileSplit;
+ import org.apache.hadoop.mapreduce.task.TaskAttemptContextImpl;
+ import org.apache.hadoop.util.ReflectionUtils;
+-import org.apache.parquet.ParquetRuntimeException;
+-import org.apache.parquet.avro.AvroParquetWriter;
+-import org.apache.parquet.hadoop.ParquetFileWriter;
+-import org.apache.parquet.hadoop.ParquetWriter;
+-import org.apache.parquet.hadoop.api.WriteSupport;
+-import org.apache.parquet.io.api.Binary;
+-import org.apache.parquet.io.api.RecordConsumer;
+-import org.apache.parquet.schema.GroupType;
+-import org.apache.parquet.schema.MessageType;
+-import org.apache.parquet.schema.PrimitiveType;
+-import org.apache.parquet.schema.Type;
+ import org.junit.Test;
+ 
+ import java.io.File;
+ import java.io.IOException;
+ 
+-import static org.apache.parquet.avro.AvroParquetWriter.builder;
+ import static org.junit.Assert.assertEquals;
+ 
+-public class DruidParquetInputTest
+-{
+-  @Test
+-  public void test() throws IOException, InterruptedException {
+-    HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/wikipedia_hadoop_parquet_job.json"));
+-    Job job = Job.getInstance(new Configuration());
+-    config.intoConfiguration(job);
+-    GenericRecord data = getFirstRecord(job, "example/wikipedia_list.parquet");
+-
+-    // field not read, should return null
+-    assertEquals(data.get("added"), null);
+-    assertEquals(data.get("page"), new Utf8("Gypsy Danger"));
+-    assertEquals(config.getParser().parse(data).getDimension("page").get(0), "Gypsy Danger");
+-  }
+-
+-  @Test
+-  public void testBinaryAsString() throws IOException, InterruptedException
+-  {
+-    HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/impala_hadoop_parquet_job.json"));
+-    Job job = Job.getInstance(new Configuration());
+-    config.intoConfiguration(job);
+-    GenericRecord data = getFirstRecord(job, ((StaticPathSpec) config.getPathSpec()).getPaths());
+-
+-    InputRow row = config.getParser().parse(data);
+-    // without binaryAsString: true, the value would something like "[104, 101, 121, 32, 116, 104, 105, 115, 32, 105, 115, 3.... ]"
+-    assertEquals(row.getDimension("field").get(0), "hey this is &é(-è_çà)=^$ù*! Ω^^");
+-    assertEquals(row.getTimestampFromEpoch(), 1471800234);
+-  }
+-
+-  private GenericRecord getFirstRecord(Job job, String parquetPath) throws IOException, InterruptedException {
+-    File testFile = new File(parquetPath);
+-    Path path = new Path(testFile.getAbsoluteFile().toURI());
+-    FileSplit split = new FileSplit(path, 0, testFile.length(), null);
+-
+-    DruidParquetInputFormat inputFormat = ReflectionUtils.newInstance(DruidParquetInputFormat.class, job.getConfiguration());
+-    TaskAttemptContext context = new TaskAttemptContextImpl(job.getConfiguration(), new TaskAttemptID());
+-    RecordReader reader = inputFormat.createRecordReader(split, context);
+-
+-    reader.initialize(split, context);
+-    reader.nextKeyValue();
+-    GenericRecord data = (GenericRecord) reader.getCurrentValue();
+-    reader.close();
+-    return data;
+-  }
++public class DruidParquetInputTest {
++    @Test
++    public void test() throws IOException, InterruptedException {
++        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/wikipedia_hadoop_parquet_job.json"));
++        Job job = Job.getInstance(new Configuration());
++        config.intoConfiguration(job);
++        GenericRecord data = getFirstRecord(job, "example/wikipedia_list.parquet");
++
++        // field not read, should return null
++        assertEquals(data.get("added"), null);
++        assertEquals(data.get("page"), new Utf8("Gypsy Danger"));
++        assertEquals(config.getParser().parse(data).getDimension("page").get(0), "Gypsy Danger");
++    }
++
++    @Test
++    public void testBinaryAsString() throws IOException, InterruptedException {
++        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/impala_hadoop_parquet_job.json"));
++        Job job = Job.getInstance(new Configuration());
++        config.intoConfiguration(job);
++        GenericRecord data = getFirstRecord(job, ((StaticPathSpec) config.getPathSpec()).getPaths());
++
++        InputRow row = config.getParser().parse(data);
++        // without binaryAsString: true, the value would something like "[104, 101, 121, 32, 116, 104, 105, 115, 32, 105, 115, 3.... ]"
++        assertEquals(row.getDimension("field").get(0), "hey this is &é(-è_çà)=^$ù*! Ω^^");
++        assertEquals(row.getTimestampFromEpoch(), 1471800234);
++    }
++
++    @Test
++    public void testParquetMapParser() throws IOException, InterruptedException {
++        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/map_parser_hadoop_parquet_job.json"));
++        Job job = Job.getInstance(new Configuration());
++        config.intoConfiguration(job);
++        GenericRecord data = getFirstRecord(job, ((StaticPathSpec) config.getPathSpec()).getPaths());
++
++        InputRow row = config.getParser().parse(data);
++        System.out.println(row);
++        assertEquals(row.getDimension("framework_call_type").get(0),"si");
++//        assertEquals(row.getDimension("cookie_id"),null);
++        assertEquals(row.getDimension("qual_experiments").size(),338);
++    }
++
++    @Test
++    public void testElmoEventParquetParser() throws IOException, InterruptedException {
++        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/elmo_all_attributes_hadoop_parquet_job.json"));
++        Job job = Job.getInstance(new Configuration());
++        config.intoConfiguration(job);
++        GenericRecord data = getFirstRecord(job, ((StaticPathSpec) config.getPathSpec()).getPaths());
++
++        InputRow row = config.getParser().parse(data);
++        System.out.println(row);
++        assertEquals(row.getDimension("framework_call_type").get(0),"si");
++//        assertEquals(row.getDimension("cookie_id"),null);
++        assertEquals(row.getDimension("qual_experiments").size(),338);
++    }
++
++    @Test
++    public void testParquetMapParserWithEmptyAttrs() throws IOException, InterruptedException {
++        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/map_empty_attrs_hadoop_parquet_job.json"));
++        Job job = Job.getInstance(new Configuration());
++        config.intoConfiguration(job);
++        GenericRecord data = getFirstRecord(job, ((StaticPathSpec) config.getPathSpec()).getPaths());
++
++        InputRow row = config.getParser().parse(data);
++        System.out.println(row);
++//        assertEquals(row.getDimension("framework_call_type").get(0),"si");
++//        assertEquals(row.getDimension("cookie_id"),null);
++//        assertEquals(row.getDimension("qual_experiments").size(),338);
++    }
++
++    private GenericRecord getFirstRecord(Job job, String parquetPath) throws IOException, InterruptedException {
++        File testFile = new File(parquetPath);
++        Path path = new Path(testFile.getAbsoluteFile().toURI());
++        FileSplit split = new FileSplit(path, 0, testFile.length(), null);
++
++        DruidParquetInputFormat inputFormat = ReflectionUtils.newInstance(DruidParquetInputFormat.class, job.getConfiguration());
++        TaskAttemptContext context = new TaskAttemptContextImpl(job.getConfiguration(), new TaskAttemptID());
++        RecordReader reader = inputFormat.createRecordReader(split, context);
++
++        reader.initialize(split, context);
++//        reader.nextKeyValue();
++        while (reader.nextKeyValue()) {
++            System.out.println(reader.getCurrentKey() + " - " + reader.getCurrentValue());
++        }
++        GenericRecord data = (GenericRecord) reader.getCurrentValue();
++        reader.close();
++        return data;
++    }
+ 
+ }
+diff --git a/pom.xml b/pom.xml
+index 11e3e95..95b9e14 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -67,7 +67,7 @@
+         <log4j.version>2.5</log4j.version>
+         <slf4j.version>1.7.12</slf4j.version>
+         <!-- If compiling with different hadoop version also modify default hadoop coordinates in TaskConfig.java -->
+-        <hadoop.compile.version>2.3.0</hadoop.compile.version>
++        <hadoop.compile.version>2.6.0.2.2.9.9-2</hadoop.compile.version>
+         <hive.version>2.0.0</hive.version>
+     </properties>
+ 
+@@ -108,7 +108,7 @@
+         <module>extensions-contrib/distinctcount</module>
+         <module>extensions-contrib/parquet-extensions</module>
+         <module>extensions-contrib/statsd-emitter</module>
+-        <module>extensions-contrib/orc-extensions</module>
++        <!--<module>extensions-contrib/orc-extensions</module>-->
+     </modules>
+ 
+     <dependencyManagement>
+@@ -673,6 +673,25 @@
+         </dependencies>
+     </dependencyManagement>
+ 
++    <repositories>
++    <repository>
++        <releases>
++            <enabled>true</enabled>
++            <updatePolicy>always</updatePolicy>
++            <checksumPolicy>warn</checksumPolicy>
++        </releases>
++        <snapshots>
++            <enabled>false</enabled>
++            <updatePolicy>never</updatePolicy>
++            <checksumPolicy>fail</checksumPolicy>
++        </snapshots>
++        <id>HDPReleases</id>
++        <name>HDP Releases</name>
++        <!--<url>http://repo.hortonworks.com/content/repositories/releases/</url>-->
++        <url>http://repo.hortonworks.com/content/groups/public</url>
++        <layout>default</layout>
++    </repository>
++    </repositories>
+     <build>
+         <plugins>
+             <plugin>
+diff --git a/services/src/main/java/io/druid/cli/PullDependencies.java b/services/src/main/java/io/druid/cli/PullDependencies.java
+index 08159f4..6f5c3be 100644
+--- a/services/src/main/java/io/druid/cli/PullDependencies.java
++++ b/services/src/main/java/io/druid/cli/PullDependencies.java
+@@ -136,7 +136,8 @@ public class PullDependencies implements Runnable
+ 
+   private static final List<String> DEFAULT_REMOTE_REPOSITORIES = ImmutableList.of(
+       "https://repo1.maven.org/maven2/",
+-      "https://metamx.artifactoryonline.com/metamx/pub-libs-releases-local"
++      "https://metamx.artifactoryonline.com/metamx/pub-libs-releases-local",
++      "http://repo.hortonworks.com/content/groups/public"
+   );
+ 
+   private TeslaAether aether;

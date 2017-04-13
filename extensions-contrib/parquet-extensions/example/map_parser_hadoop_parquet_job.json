@@ -1,0 +1,82 @@
+{
+  "type": "index_hadoop",
+  "spec": {
+    "ioConfig": {
+      "type": "hadoop",
+      "inputSpec": {
+        "type": "static",
+        "inputFormat": "io.druid.data.input.parquet.DruidParquetInputFormat",
+        "paths": "example/parquet/eventDate=2016-10-26/eventHr=00/eventMin=59/part-r-00001-5cee230c-bc2d-4344-a427-c995c284f0e3.gz.parquet"
+      },
+      "metadataUpdateSpec": {
+        "type": "postgresql",
+        "connectURI": "jdbc:postgresql://localhost/druid",
+        "user": "druid",
+        "password": "asdf",
+        "segmentTable": "druid_segments"
+      },
+      "segmentOutputPath": "/tmp/segments"
+    },
+    "dataSchema": {
+      "dataSource": "elmo_server",
+      "parser": {
+        "type": "parquet",
+        "binaryAsString": true,
+        "parquetParser": "{\"fields\":[\"timestamp\",\"loadDateTime\",\"stringMap[eventDate]\",\"stringMap[framework_call_type]\",\"intArrayMap[qual_experiments]\",\"intArrayMap[qual_treatments]\",\"intArrayMap[server_experienced_experiment]\",\"intArrayMap[server_experienced_treatment]\",\"booleanMap[bot]\",\"stringMap[cookie_id]\"]}",
+        "parseSpec": {
+          "format": "timeAndDims",
+          "timestampSpec": {
+            "column": "timestamp",
+            "format": "millis"
+          },
+          "dimensionsSpec": {
+            "dimensions": [
+              "loadDateTime",
+              "eventDate",
+              "framework_call_type",
+              "qual_experiments",
+              "qual_treatments",
+              "server_experienced_experiment",
+              "server_experienced_treatment",
+              "bot"
+            ],
+            "dimensionExclusions": [],
+            "spatialDimensions": []
+          }
+        }
+      },
+      "metricsSpec": [
+        {
+          "type": "count",
+          "name": "count"
+        },
+        {
+          "type": "hyperUnique",
+          "name": "dist_visitor_cnt",
+          "fieldName": "cookie_id"
+        }
+      ],
+      "granularitySpec": {
+        "type": "uniform",
+        "segmentGranularity": "DAY",
+        "queryGranularity": "NONE",
+        "intervals": [
+          "2016-10-26/2016-10-27"
+        ]
+      }
+    },
+    "tuningConfig": {
+      "type": "hadoop",
+      "workingPath": "tmp/working_path",
+      "partitionsSpec": {
+        "targetPartitionSize": 5000000
+      },
+      "jobProperties": {
+        "mapreduce.map.java.opts": "-server -Duser.timezone=UTC -Dfile.encoding=UTF-8 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps",
+        "mapreduce.reduce.java.opts": "-server -Duser.timezone=UTC -Dfile.encoding=UTF-8 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps",
+        "mapred.child.java.opts": "-server -XX:+PrintGCDetails -XX:+PrintGCTimeStamps"
+      },
+      "leaveIntermediate": true
+    }
+  }
+}
