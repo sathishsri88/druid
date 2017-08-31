@@ -1,5 +1,7 @@
 package io.druid.data.input.parquet.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import org.apache.avro.util.Utf8;
@@ -14,19 +16,26 @@ import java.util.regex.Pattern;
  */
 public final class Field {
 
-    public static final Utf8 EMPTY_STR = new Utf8("");
-    public static final int DEF_INDEX = -1;
+    private static final Utf8 EMPTY_STR = new Utf8("");
+    private static final int DEF_INDEX = -1;
 
     private final String rootFieldName;
     private final int index;
     private final Utf8 key;
     private final FieldType fieldType;
+    private final Field field;
 
-    private Field(String rootFieldName, int index, Utf8 key, FieldType fieldType) {
+    @JsonCreator
+    private Field(@JsonProperty("rootFieldName") String rootFieldName,
+                  @JsonProperty("index") int index,
+                  @JsonProperty("key") Utf8 key,
+                  @JsonProperty(value = "fieldType", required = true) FieldType fieldType,
+                  @JsonProperty("field") Field field) {
         this.rootFieldName = rootFieldName;
         this.index = index;
         this.key = key;
         this.fieldType = fieldType;
+        this.field = field;
     }
 
     public String getRootFieldName() {
@@ -45,29 +54,33 @@ public final class Field {
         return fieldType;
     }
 
+    public Field getField() {
+        return field;
+    }
+
     private static final Pattern SQUARE_PATTERN = Pattern.compile("\\[(.*?)\\]");
     private static final Pattern CURLY_PATTERN = Pattern.compile("\\((.*?)\\)");
 
-    public static final Field parseField(String field) {
+    private static Field parseField(String field) {
         Preconditions.checkNotNull(field, "Nullable field not expected while parsing field");
         if (field.contains("[")) {
             return new Field(field.substring(0, field.indexOf("[")), -1,
-                    extractKey(SQUARE_PATTERN, field), FieldType.MAP);
+                    extractKey(SQUARE_PATTERN, field), FieldType.MAP, null);
         } else if (field.contains(("("))) {
             final Utf8 key = extractKey(CURLY_PATTERN, field);
             if (StringUtils.isNumeric(key)) {
                 return new Field(field.substring(0, field.indexOf("(")), Integer.parseInt(key.toString()),
-                        key, FieldType.MAP);
+                        key, FieldType.MAP, null);
             } else {
                 return new Field(field.substring(0, field.indexOf("(")), -1,
-                        key, FieldType.MAP);
+                        key, FieldType.MAP, null);
             }
         } else {
-            return new Field(field, DEF_INDEX, EMPTY_STR, FieldType.STRING);
+            return new Field(EMPTY_STR.toString(), DEF_INDEX, new Utf8(field), FieldType.STRING, null);
         }
     }
 
-    public static final List<Field> parseFields(List<String> fields) {
+    public static List<Field> parseFields(List<String> fields) {
         final List<Field> parsedFields = Lists.newArrayList();
         if (fields != null && !fields.isEmpty()) {
             for (String field : fields) {
@@ -77,7 +90,7 @@ public final class Field {
         return parsedFields;
     }
 
-    public static final Utf8 extractKey(Pattern pattern, String field) {
+    private static Utf8 extractKey(Pattern pattern, String field) {
         final Matcher matcher = pattern.matcher(field);
         while (matcher.find()) {
             return new Utf8(matcher.group(1));

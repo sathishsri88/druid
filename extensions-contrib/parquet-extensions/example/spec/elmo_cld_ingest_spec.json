@@ -1,0 +1,470 @@
+{
+  "type": "index_hadoop",
+  "spec": {
+    "dataSchema": {
+      "dataSource": "elmo_cld",
+      "parser": {
+        "type": "parquet",
+        "binaryAsString": true,
+        "parquetParser": "{\"fields\":[\"timestamp\",\"experiencedexperiments\",\"experimentnames\",\"experimentversions\",\"experiencedtreatments\",\"treatmentnames\",\"treatmentversions\",\"eventdate\",\"attributesmap[isp_name]\",\"attributesmap[isp_user_type]\",\"attributesmap[language_id]\",\"attributesmap[locale]\",\"attributesmap[component_name]\",\"attributesmap[page_name]\",\"attributesmap[page_group]\",\"attributesmap[os]\",\"attributesmap[browser_version]\",\"attributesmap[browser_type]\",\"attributesmap[decr_account_number]\",\"attributesmap[decr_merchant_account_number]\",\"attributesmap[decr_transaction_id]\",\"attributesmap[device_id]\",\"attributesmap[device]\",\"attributesmap[device_model]\",\"attributesmap[ip]\",\"attributesmap[connection_type]\",\"attributesmap[mobile_device_name]\",\"attributesmap[user_logged_in]\",\"attributesmap[visitor_id]\",\"attributesmap[cookie_id]\",\"attributesmap[bot]\",\"attributesmap[enrich]\",\"attributesmap[country_iso_code]\",\"attributesmap[country_name]\",\"attributesmap[continent]\",\"attributesmap[sw]\",\"attributesmap[screen_height]\",\"attributesmap[device_height]\",\"attributesmap[device_width]\",\"attributesmap[event_type]\",\"attributesmap[event_identifier]\",\"cld_attributes[prmry_card_added_dt]\",\"cld_attributes[business_type]\",\"cld_attributes[dc_exp_dt_year]\",\"cld_attributes[emailable_status_y_n]\",\"cld_attributes[cust_intent]\",\"cld_attributes[is_debit_card]\",\"cld_attributes[last_received_dispute_dt]\",\"cld_attributes[wc_page_last_visit_dt]\",\"cld_attributes[is_student_acct_y_n]\",\"cld_attributes[cust_age_group_code]\",\"cld_attributes[acct_locked_dt]\",\"cld_attributes[is_guest_y_n]\",\"cld_attributes[first_recv_pmt_txn_dt]\",\"cld_attributes[mobile_app_dwnld_y_n]\",\"cld_attributes[first_cb_recv_dt]\",\"cld_attributes[acct_rstrd_dt]\",\"cld_attributes[email_spam_policy_change_y_n]\",\"cld_attributes[cust_busn_seg_key]\",\"cld_attributes[sub_indy_id]\",\"cld_attributes[guest_wax_acct_upgrde_dt]\",\"cld_attributes[busn_name]\",\"cld_attributes[last_ach_confirm_dt]\",\"cld_attributes[dc_exp_dt_mth]\",\"cld_attributes[yob]\",\"cld_attributes[busn_addr_state]\",\"cld_attributes[frs_optin_dt]\",\"cld_attributes[prmry_card_removed_y_n]\",\"cld_attributes[prmer_to_busn_upgrde_dt]\",\"cld_attributes[cip_status]\",\"cld_attributes[mkt_sub_regn_key]\",\"cld_attributes[mobile_acqstn_chnl_desc]\",\"cld_attributes[first_pmt_sent_recv_flag]\",\"cld_attributes[dpc_y_n]\",\"cld_attributes[last_email_open_dt]\",\"cld_attributes[last_received_chargeback_dt]\",\"cld_attributes[merc_website_url]\",\"cld_attributes[account_type]\",\"cld_attributes[prmry_email_vrfd_dt]\",\"cld_attributes[busn_addr_zip_code]\",\"cld_attributes[cust_actv_seg_key]\",\"cld_attributes[prmry_card_auth_credit_dt]\",\"cld_attributes[prmry_reside_cntry_code]\",\"cld_attributes[retrv_forgot_pwd_dt]\",\"cld_attributes[first_sent_pmt_txn_dt]\",\"cld_attributes[pan_verified_y_n]\",\"cld_attributes[mobile_app_login_y_n]\",\"cld_attributes[last_card_added_dt]\",\"cld_attributes[wc_loan_tkn_dt]\",\"cld_attributes[wc_decln_dt]\",\"cld_attributes[last_pmt_txn_dt]\",\"cld_attributes[prmry_ach_added_dt]\",\"cld_attributes[last_web_access_dt]\",\"cld_attributes[last_recv_pmt_txn_dt]\",\"cld_attributes[frs_y_n]\",\"cld_attributes[wc_whitelist_mbr_y_n]\",\"cld_attributes[ppme_slug_active_y_n]\",\"cld_attributes[last_card_dcline_dt]\",\"cld_attributes[last_sent_pmt_txn_dt]\",\"cld_attributes[ppme_attr_type_val]\",\"cld_attributes[email_spam_dev_ntwrk_y_n]\",\"cld_attributes[merch_cntry_code]\",\"cld_attributes[prmry_addr_state]\",\"cld_attributes[busn_to_prsnl_dwngrde_dt]\",\"cld_attributes[acct_rstrd_y_n]\",\"cld_attributes[ppme_page_last_visit_dt]\",\"cld_attributes[last_ach_added_dt]\",\"cld_attributes[prmry_ach_removed_dt]\",\"cld_attributes[last_email_delivered_dt]\",\"cld_attributes[busn_addr_cntry_code]\",\"cld_attributes[prmry_email_addr]\",\"cld_attributes[cust_engagmnt_seg_key]\",\"cld_attributes[last_pmt_sent_recv_flag]\",\"cld_attributes[prmry_addr_city]\",\"cld_attributes[acct_cre_dt]\",\"cld_attributes[gender]\",\"cld_attributes[prmry_ach_vrfd_dt]\",\"cld_attributes[wc_applied_dt]\",\"cld_attributes[cust_fin_rptg_cntry_code]\",\"cld_attributes[is_credit_card]\",\"cld_attributes[email_spam_promos_y_n]\",\"cld_attributes[pp_here_terminal_y_n]\",\"cld_attributes[indy_id]\",\"cld_attributes[mobile_num]\",\"cld_attributes[email_spam_newsletter_y_n]\",\"cld_attributes[last_ach_decline_dt]\",\"cld_attributes[prmry_card_expired_y_n]\",\"cld_attributes[prsnl_to_prmr_upgrde_dt]\",\"cld_attributes[first_ach_decline_dt]\",\"cld_attributes[last_email_click_dt]\",\"cld_attributes[tot_dispute_received]\",\"cld_attributes[first_pmt_txn_dt]\",\"cld_attributes[email_bnce_dt]\",\"cld_attributes[pphere_association_name]\",\"cld_attributes[last_card_dcline_rsn]\",\"cld_attributes[wc_loan_amt_curr_code]\",\"cld_attributes[first_fraud_reversal_recv_dt]\",\"cld_attributes[pph_signup_dt]\",\"cld_attributes[is_large_merchant_y_n]\",\"cld_attributes[pp_here_actvtn_dt]\",\"cld_attributes[acct_clsd_dt]\",\"cld_attributes[prmry_ach_auth_deposit_dt]\",\"cld_attributes[last_card_auth_verify_dt]\",\"cld_attributes[last_app_login_dt]\",\"cld_attributes[merch_min_acct_y_n]\",\"cld_attributes[ppme_slug_cre_dt]\",\"cld_attributes[wc_eligible_amt_curr_code]\",\"cld_attributes[open_wax_acct_y_n]\",\"cld_attributes[email_confirmed_y_n]\",\"cld_attributes[last_topup_dt]\",\"cld_attributes[prmry_card_vrfd_dt]\",\"cld_attributes[true_indy_name]\",\"cld_attributes[is_account_managed_y_n]\",\"cld_attributes[wc_actv_loan_y_n]\",\"cld_attributes[wc_repaid_amt_curr_code]\",\"cld_attributes[cust_first_name]\",\"cld_attributes[ever_ach_vrfd_y_n]\",\"cld_attributes[is_le_merchant_y_n]\",\"cld_attributes[kyc_status]\",\"cld_attributes[wc_hist_loan_count]\",\"cld_attributes[cust_curr_code]\",\"cld_attributes[acct_locked_y_n]\",\"cld_attributes[busn_to_prmer_dwngrde_dt]\",\"cld_attributes[last_fraud_rvsl_recv_dt]\",\"cld_attributes[merc_website_flg_proxy]\",\"cld_attributes[amex_card_y_n]\",\"cld_attributes[email_spam_slr_tips_y_n]\",\"cld_attributes[prmry_addr_zip_code]\",\"cld_attributes[cust_acct_clsfn_key]\",\"cld_attributes[wc_approved_dt]\",\"cld_attributes[wc_loan_repaid_dt]\",\"cld_attributes[glb_suppression_y_n]\",\"cld_attributes[email_spam_dt]\",\"cld_attributes[cust_lang_code]\",\"cld_attributes[prmry_email_domain]\",\"cld_attributes[is_multi_currency_bal_y_n]\",\"cld_attributes[casual_seller_y_n]\",\"cld_attributes[first_odr_recv_case_dt]\",\"cld_attributes[busn_addr_city]\",\"cld_attributes[cust_last_name]\",\"cld_attributes[balance_effective_dt]\",\"cld_attributes[IN_KYC_COMPLETE_Y_N]\",\"cld_attributes[acct_clsd_y_n]\",\"cld_attributes[mkt_regn_code]\",\"cld_attributes[last_received_claim_dt]\",\"cld_attributes[prmr_to_prsnl_dwngrde_dt]\",\"cld_attributes[wc_eligible_amt]\",\"cld_attributes[last_pmt_txn_usd_amt]\",\"cld_attributes[first_sent_pmt_txn_amt]\",\"cld_attributes[party_key]\",\"cld_attributes[wc_repaid_amt]\",\"cld_attributes[actv_conf_bank_accts_cnt]\",\"cld_attributes[first_sent_pmt_txn_usd_amt]\",\"cld_attributes[tot_bal_local_currency]\",\"cld_attributes[tot_topup_last12m]\",\"cld_attributes[ntpv_12_mth_sent_usd_amt]\",\"cld_attributes[last_sent_pmt_txn_amt]\",\"cld_attributes[last_sent_pmt_txn_usd_amt]\",\"cld_attributes[tot_recv_pmt_txn_cnt]\",\"cld_attributes[tot_bal_equiv_usd_amt]\",\"cld_attributes[wc_loan_amt]\",\"cld_attributes[actv_cc_on_file_cnt]\",\"cld_attributes[tot_claims_received]\",\"cld_attributes[tot_recv_pmt_txn_amt]\",\"cld_attributes[tot_send_pmt_txn_cnt]\",\"cld_attributes[tot_chargebacks_received]\",\"cld_attributes[last_recv_pmt_txn_amt]\",\"cld_attributes[first_recv_pmt_txn_usd_amt]\",\"cld_attributes[ntpv_12_mth_sent_cnt]\",\"cld_attributes[last_recv_pmt_txn_usd_amt]\",\"cld_attributes[actv_bank_accts_on_file_cnt]\",\"cld_attributes[actv_conf_cc_on_file_cnt]\",\"cld_attributes[tot_rev_usd_amt]\",\"cld_attributes[tot_non_topup_last12m]\",\"cld_attributes[tot_send_pmt_txn_amt]\",\"cld_attributes[tot_rev_recv_usd_amt]\",\"cld_attributes[first_pmt_txn_usd_amt]\",\"cld_attributes[tot_rev_send_usd_amt]\"]}",
+        "parseSpec": {
+          "format": "timeAndDims",
+          "timestampSpec": {
+            "column": "timestamp",
+            "format": "millis"
+          },
+          "dimensionsSpec": {
+            "dimensions": [
+              "experiencedexperiments",
+              "experimentnames",
+              "experimentversions",
+              "experiencedtreatments",
+              "treatmentnames",
+              "treatmentversions",
+              "eventdate",
+              "isp_name",
+              "isp_user_type",
+              "language_id",
+              "locale",
+              "component_name",
+              "page_name",
+              "page_group",
+              "os",
+              "browser_version",
+              "browser_type",
+              "device_id",
+              "device",
+              "device_model",
+              "connection_type",
+              "mobile_device_name",
+              "user_logged_in",
+              "bot",
+              "enrich",
+              "country_iso_code",
+              "country_name",
+              "continent",
+              "sw",
+              "screen_height",
+              "device_height",
+              "device_width",
+              "event_type",
+              "event_identifier",
+              "email_spam_surveys_y_n",
+              "prmry_card_added_dt",
+              "business_type",
+              "dc_exp_dt_year",
+              "emailable_status_y_n",
+              "cust_intent",
+              "is_debit_card",
+              "last_received_dispute_dt",
+              "wc_page_last_visit_dt",
+              "is_student_acct_y_n",
+              "cust_age_group_code",
+              "acct_locked_dt",
+              "is_guest_y_n",
+              "first_recv_pmt_txn_dt",
+              "mobile_app_dwnld_y_n",
+              "first_cb_recv_dt",
+              "acct_rstrd_dt",
+              "email_spam_policy_change_y_n",
+              "cust_busn_seg_key",
+              "sub_indy_id",
+              "guest_wax_acct_upgrde_dt",
+              "busn_name",
+              "last_ach_confirm_dt",
+              "dc_exp_dt_mth",
+              "yob",
+              "busn_addr_state",
+              "frs_optin_dt",
+              "prmry_card_removed_y_n",
+              "prmer_to_busn_upgrde_dt",
+              "cip_status",
+              "mkt_sub_regn_key",
+              "mobile_acqstn_chnl_desc",
+              "first_pmt_sent_recv_flag",
+              "dpc_y_n",
+              "last_email_open_dt",
+              "last_received_chargeback_dt",
+              "merc_website_url",
+              "account_type",
+              "prmry_email_vrfd_dt",
+              "busn_addr_zip_code",
+              "cust_actv_seg_key",
+              "prmry_card_auth_credit_dt",
+              "prmry_reside_cntry_code",
+              "retrv_forgot_pwd_dt",
+              "first_sent_pmt_txn_dt",
+              "pan_verified_y_n",
+              "mobile_app_login_y_n",
+              "last_card_added_dt",
+              "wc_loan_tkn_dt",
+              "wc_decln_dt",
+              "last_pmt_txn_dt",
+              "prmry_ach_added_dt",
+              "last_web_access_dt",
+              "last_recv_pmt_txn_dt",
+              "frs_y_n",
+              "wc_whitelist_mbr_y_n",
+              "ppme_slug_active_y_n",
+              "last_card_dcline_dt",
+              "last_sent_pmt_txn_dt",
+              "ppme_attr_type_val",
+              "email_spam_dev_ntwrk_y_n",
+              "merch_cntry_code",
+              "prmry_addr_state",
+              "busn_to_prsnl_dwngrde_dt",
+              "acct_rstrd_y_n",
+              "ppme_page_last_visit_dt",
+              "last_ach_added_dt",
+              "prmry_ach_removed_dt",
+              "last_email_delivered_dt",
+              "busn_addr_cntry_code",
+              "prmry_email_addr",
+              "cust_engagmnt_seg_key",
+              "last_pmt_sent_recv_flag",
+              "prmry_addr_city",
+              "acct_cre_dt",
+              "gender",
+              "prmry_ach_vrfd_dt",
+              "wc_applied_dt",
+              "cust_fin_rptg_cntry_code",
+              "is_credit_card",
+              "email_spam_promos_y_n",
+              "pp_here_terminal_y_n",
+              "indy_id",
+              "mobile_num",
+              "email_spam_newsletter_y_n",
+              "last_ach_decline_dt",
+              "prmry_card_expired_y_n",
+              "prsnl_to_prmr_upgrde_dt",
+              "first_ach_decline_dt",
+              "last_email_click_dt",
+              "tot_dispute_received",
+              "first_pmt_txn_dt",
+              "email_bnce_dt",
+              "pphere_association_name",
+              "last_card_dcline_rsn",
+              "wc_loan_amt_curr_code",
+              "first_fraud_reversal_recv_dt",
+              "pph_signup_dt",
+              "is_large_merchant_y_n",
+              "pp_here_actvtn_dt",
+              "acct_clsd_dt",
+              "prmry_ach_auth_deposit_dt",
+              "last_card_auth_verify_dt",
+              "last_app_login_dt",
+              "merch_min_acct_y_n",
+              "ppme_slug_cre_dt",
+              "wc_eligible_amt_curr_code",
+              "open_wax_acct_y_n",
+              "email_confirmed_y_n",
+              "last_topup_dt",
+              "prmry_card_vrfd_dt",
+              "true_indy_name",
+              "is_account_managed_y_n",
+              "wc_actv_loan_y_n",
+              "wc_repaid_amt_curr_code",
+              "cust_first_name",
+              "ever_ach_vrfd_y_n",
+              "is_le_merchant_y_n",
+              "kyc_status",
+              "wc_hist_loan_count",
+              "cust_curr_code",
+              "acct_locked_y_n",
+              "busn_to_prmer_dwngrde_dt",
+              "last_fraud_rvsl_recv_dt",
+              "merc_website_flg_proxy",
+              "amex_card_y_n",
+              "email_spam_slr_tips_y_n",
+              "prmry_addr_zip_code",
+              "cust_acct_clsfn_key",
+              "wc_approved_dt",
+              "wc_loan_repaid_dt",
+              "glb_suppression_y_n",
+              "email_spam_dt",
+              "cust_lang_code",
+              "prmry_email_domain",
+              "is_multi_currency_bal_y_n",
+              "casual_seller_y_n",
+              "first_odr_recv_case_dt",
+              "busn_addr_city",
+              "cust_last_name",
+              "balance_effective_dt",
+              "IN_KYC_COMPLETE_Y_N",
+              "acct_clsd_y_n",
+              "mkt_regn_code",
+              "last_received_claim_dt",
+              "prmr_to_prsnl_dwngrde_dt"
+            ],
+            "dimensionExclusions": [
+            ],
+            "spatialDimensions": [
+            ]
+          }
+        }
+      },
+      "metricsSpec": [
+        {
+          "type": "count",
+          "name": "count"
+        },
+        {
+          "type": "hyperUnique",
+          "name": "dist_visits",
+          "fieldName": "visitor_id"
+        },
+        {
+          "type": "hyperUnique",
+          "name": "dist_visitors",
+          "fieldName": "cookie_id"
+        },
+        {
+          "type": "hyperUnique",
+          "name": "dist_users",
+          "fieldName": "decr_account_number"
+        },
+        {
+          "type": "hyperUnique",
+          "name": "dist_merchants",
+          "fieldName": "decr_merchant_account_number"
+        },
+        {
+          "type": "hyperUnique",
+          "name": "dist_transactions",
+          "fieldName": "decr_transaction_id"
+        },
+        {
+          "type": "hyperUnique",
+          "name": "dist_ip",
+          "fieldName": "ip"
+        },
+        {
+          "type": "hyperUnique",
+          "name": "dist_party_key",
+          "fieldName": "party_key"
+        },
+        {
+          "type": "doubleSum",
+          "name": "wc_eligible_amt",
+          "fieldName": "wc_eligible_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "last_pmt_txn_usd_amt",
+          "fieldName": "last_pmt_txn_usd_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "first_sent_pmt_txn_amt",
+          "fieldName": "first_sent_pmt_txn_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "wc_repaid_amt",
+          "fieldName": "wc_repaid_amt"
+        },
+        {
+          "type": "longSum",
+          "name": "actv_conf_bank_accts_cnt",
+          "fieldName": "actv_conf_bank_accts_cnt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "first_sent_pmt_txn_usd_amt",
+          "fieldName": "first_sent_pmt_txn_usd_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_bal_local_currency",
+          "fieldName": "tot_bal_local_currency"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_topup_last12m",
+          "fieldName": "tot_topup_last12m"
+        },
+        {
+          "type": "doubleSum",
+          "name": "last_sent_pmt_txn_amt",
+          "fieldName": "last_sent_pmt_txn_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "last_sent_pmt_txn_usd_amt",
+          "fieldName": "last_sent_pmt_txn_usd_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_recv_pmt_txn_cnt",
+          "fieldName": "tot_recv_pmt_txn_cnt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_bal_equiv_usd_amt",
+          "fieldName": "tot_bal_equiv_usd_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "wc_loan_amt",
+          "fieldName": "wc_loan_amt"
+        },
+        {
+          "type": "longSum",
+          "name": "actv_cc_on_file_cnt",
+          "fieldName": "actv_cc_on_file_cnt"
+        },
+        {
+          "type": "longSum",
+          "name": "tot_claims_received",
+          "fieldName": "tot_claims_received"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_recv_pmt_txn_amt",
+          "fieldName": "tot_recv_pmt_txn_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_send_pmt_txn_cnt",
+          "fieldName": "tot_send_pmt_txn_cnt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_chargebacks_received",
+          "fieldName": "tot_chargebacks_received"
+        },
+        {
+          "type": "doubleSum",
+          "name": "last_recv_pmt_txn_amt",
+          "fieldName": "last_recv_pmt_txn_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "first_recv_pmt_txn_usd_amt",
+          "fieldName": "first_recv_pmt_txn_usd_amt"
+        },
+        {
+          "type": "longSum",
+          "name": "ntpv_12_mth_sent_cnt",
+          "fieldName": "ntpv_12_mth_sent_cnt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "last_recv_pmt_txn_usd_amt",
+          "fieldName": "last_recv_pmt_txn_usd_amt"
+        },
+        {
+          "type": "longSum",
+          "name": "actv_bank_accts_on_file_cnt",
+          "fieldName": "actv_bank_accts_on_file_cnt"
+        },
+        {
+          "type": "longSum",
+          "name": "actv_conf_cc_on_file_cnt",
+          "fieldName": "actv_conf_cc_on_file_cnt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_rev_usd_amt",
+          "fieldName": "tot_rev_usd_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_non_topup_last12m",
+          "fieldName": "tot_non_topup_last12m"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_send_pmt_txn_amt",
+          "fieldName": "tot_send_pmt_txn_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_rev_recv_usd_amt",
+          "fieldName": "tot_rev_recv_usd_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "first_pmt_txn_usd_amt",
+          "fieldName": "first_pmt_txn_usd_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_rev_send_usd_amt",
+          "fieldName": "tot_rev_send_usd_amt"
+        }
+      ],
+      "granularitySpec": {
+        "type": "uniform",
+        "segmentGranularity": "DAY",
+        "queryGranularity": "DAY",
+        "rollup": true,
+        "intervals": [
+          "2017-07-26T00:00:00.000Z/2017-07-27T00:59:59.000Z"
+        ]
+      }
+    },
+    "ioConfig":{
+      "type":"hadoop",
+      "inputSpec":{
+        "type":"static",
+        "inputFormat": "io.druid.data.input.parquet.DruidParquetInputFormat",
+        "paths":"example/events/cld-hive/000488_0"
+      },
+      "segmentOutputPath": "/tmp/segments"
+    },
+    "tuningConfig":{
+      "type":"hadoop",
+      "workingPath": "tmp/working_path",
+      "version":"2017-02-09T07:36:09.249Z",
+      "partitionsSpec":{
+        "type":"hashed",
+        "targetPartitionSize":750000,
+        "maxPartitionSize":750000,
+        "assumeGrouped":false,
+        "numShards":-1,
+        "partitionDimensions":[
+
+        ]
+      },
+      "shardSpecs":{
+
+      },
+      "indexSpec":{
+        "bitmap":{
+          "type":"concise"
+        },
+        "dimensionCompression":"lz4",
+        "metricCompression":"lz4",
+        "longEncoding":"longs"
+      },
+      "maxRowsInMemory":75000,
+      "leaveIntermediate":true,
+      "cleanupOnFailure":true,
+      "overwriteFiles":false,
+      "ignoreInvalidRows":false,
+      "jobProperties":{
+        "hdp.version": "2.5.3.58-3",
+        "mapreduce.job.user.classpath.first": "true",
+        "mapreduce.task.timeout": "1800000",
+        "mapreduce.map.memory.mb": "2048",
+        "mapreduce.map.java.opts": "-server -Xmx3072m -Duser.timezone=UTC -Dfile.encoding=UTF-8",
+        "mapreduce.reduce.memory.mb": "2048",
+        "mapreduce.reduce.java.opts": "-server -Xmx8192m -Duser.timezone=UTC -Dfile.encoding=UTF-8",
+        "mapreduce.job.queuename": "experimentation",
+        "mapred.child.ulimit": "16777216",
+        "mapreduce.map.output.compress": "true",
+        "mapred.map.output.compress.codec": "org.apache.hadoop.io.compress.GzipCodec"
+      },
+      "combineText":false,
+      "useCombiner":false,
+      "buildV9Directly":false,
+      "numBackgroundPersistThreads":0,
+      "forceExtendableShardSpecs":false
+    },
+    "uniqueId": "715f31321096480b869aca2cc9c5d252"
+  },
+  "hadoopDependencyCoordinates": [
+    "org.apache.hadoop:hadoop-client:2.6.0"
+  ]
+}

@@ -1,5 +1,8 @@
 package io.druid.data.input.parquet.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.List;
 
 /**
@@ -7,29 +10,23 @@ import java.util.List;
  */
 public class ParquetParser {
 
-    private List<String> fields;
-
-    public List<String> getFields() {
-        return fields;
+    @JsonCreator
+    public ParquetParser(@JsonProperty("fields") List<Field> fields) {
+        this.fields = fields;
     }
 
-    public void setFields(List<String> fields) {
-        this.fields = fields;
+    private final List<Field> fields;
+
+    public List<Field> getFields() {
+        return fields;
     }
 
     private transient List<Field> parsedFields;
 
-    public List<Field> getParsedFields() {
-        return parsedFields;
-    }
-
-    public void setParsedFields(List<Field> parsedFields) {
-        this.parsedFields = parsedFields;
-    }
-
     public boolean containsType(String typeName) {
-        for (Field field : this.getParsedFields()) {
-            if (field.getRootFieldName().equals(typeName))
+        for (Field field : this.getFields()) {
+            if (field.getKey().toString().equals(typeName) || (field.getRootFieldName() != null &&
+                    field.getRootFieldName().equals(typeName)))
                 return true;
         }
         return false;

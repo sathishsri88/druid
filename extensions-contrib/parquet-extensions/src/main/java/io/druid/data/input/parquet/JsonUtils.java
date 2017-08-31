@@ -10,4 +10,8 @@ public class JsonUtils {
     public static final <T> T readFrom(String json, Class<T> t) {
         return new Gson().fromJson(json, t);
     }
+
+    public static final String writeToString(Object obj) {
+        return new Gson().toJson(obj);
+    }
 }

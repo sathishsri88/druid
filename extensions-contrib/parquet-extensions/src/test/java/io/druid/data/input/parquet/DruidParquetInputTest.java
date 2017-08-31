@@ -75,9 +75,9 @@ public class DruidParquetInputTest {
 
         InputRow row = config.getParser().parse(data);
         System.out.println(row);
-        assertEquals(row.getDimension("framework_call_type").get(0),"si");
+        assertEquals(row.getDimension("framework_call_type").get(0), "si");
 //        assertEquals(row.getDimension("cookie_id"),null);
-        assertEquals(row.getDimension("qual_experiments").size(),338);
+        assertEquals(row.getDimension("qual_experiments").size(), 338);
     }
 
     @Test
@@ -89,9 +89,31 @@ public class DruidParquetInputTest {
 
         InputRow row = config.getParser().parse(data);
         System.out.println(row);
-        assertEquals(row.getDimension("framework_call_type").get(0),"si");
+        assertEquals(row.getDimension("framework_call_type").get(0), "si");
 //        assertEquals(row.getDimension("cookie_id"),null);
-        assertEquals(row.getDimension("qual_experiments").size(),338);
+        assertEquals(row.getDimension("qual_experiments").size(), 338);
+    }
+
+    @Test
+    public void testPrimitiveParquetProcessing() throws IOException, InterruptedException {
+        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/elmo_checkout_with_primitives.json"));
+        Job job = Job.getInstance(new Configuration());
+        config.intoConfiguration(job);
+        GenericRecord data = getFirstRecord(job, ((StaticPathSpec) config.getPathSpec()).getPaths());
+
+        InputRow row = config.getParser().parse(data);
+        System.out.println(row);
+    }
+
+    @Test
+    public void testHiveParquetFile() throws IOException, InterruptedException {
+        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/spec/checkoutDruidSpec2017-07-25_16_40_33.json"));
+        Job job = Job.getInstance(new Configuration());
+        config.intoConfiguration(job);
+        GenericRecord data = getFirstRecord(job, ((StaticPathSpec) config.getPathSpec()).getPaths());
+
+        InputRow row = config.getParser().parse(data);
+        System.out.println(row);
     }
 
     @Test
@@ -108,6 +130,39 @@ public class DruidParquetInputTest {
 //        assertEquals(row.getDimension("qual_experiments").size(),338);
     }
 
+    @Test
+    public void testELMOCldIngestionParser() throws IOException, InterruptedException {
+        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/spec/elmo_cld_ingest_spec.json"));
+        Job job = Job.getInstance(new Configuration());
+        config.intoConfiguration(job);
+        GenericRecord data = getFirstRecord(job, ((StaticPathSpec) config.getPathSpec()).getPaths());
+
+        InputRow row = config.getParser().parse(data);
+        System.out.println(row);
+    }
+
+    @Test
+    public void testPangeaCldIngestionParser() throws IOException, InterruptedException {
+        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/spec/pangea_cld_ingest_spec.json"));
+        Job job = Job.getInstance(new Configuration());
+        config.intoConfiguration(job);
+        GenericRecord data = getFirstRecord(job, ((StaticPathSpec) config.getPathSpec()).getPaths());
+
+        InputRow row = config.getParser().parse(data);
+        System.out.println(row);
+    }
+
+    @Test
+    public void testExtractNestedMap() throws IOException, InterruptedException {
+        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/spec/pangea_cld_ingest_spec_ts_extract.json"));
+        Job job = Job.getInstance(new Configuration());
+        config.intoConfiguration(job);
+        GenericRecord data = getFirstRecord(job, ((StaticPathSpec) config.getPathSpec()).getPaths());
+
+        InputRow row = config.getParser().parse(data);
+        System.out.println(row);
+    }
+
     private GenericRecord getFirstRecord(Job job, String parquetPath) throws IOException, InterruptedException {
         File testFile = new File(parquetPath);
         Path path = new Path(testFile.getAbsoluteFile().toURI());
@@ -119,8 +174,10 @@ public class DruidParquetInputTest {
 
         reader.initialize(split, context);
 //        reader.nextKeyValue();
-        while (reader.nextKeyValue()) {
+        int cnt = 0;
+        while (reader.nextKeyValue() && cnt < 150) {
             System.out.println(reader.getCurrentKey() + " - " + reader.getCurrentValue());
+            cnt++;
         }
         GenericRecord data = (GenericRecord) reader.getCurrentValue();
         reader.close();

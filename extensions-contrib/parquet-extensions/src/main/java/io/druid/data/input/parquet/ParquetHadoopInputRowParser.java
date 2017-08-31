@@ -30,14 +30,14 @@ import io.druid.data.input.impl.InputRowParser;
 import io.druid.data.input.impl.ParseSpec;
 import io.druid.data.input.impl.TimestampSpec;
 import io.druid.data.input.parquet.model.Field;
-import io.druid.data.input.parquet.model.FieldType;
 import io.druid.data.input.parquet.model.ParquetParser;
+import org.apache.avro.Schema;
+import org.apache.avro.generic.GenericData;
 import org.apache.avro.generic.GenericRecord;
 import org.apache.avro.util.Utf8;
 import org.joda.time.DateTime;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -45,23 +45,17 @@ public class ParquetHadoopInputRowParser implements InputRowParser<GenericRecord
     private final ParseSpec parseSpec;
     private final boolean binaryAsString;
     private final List<String> dimensions;
-    private final String parquetParserString;
     private final ParquetParser parquetParser;
-    private static final String EMPTY_STRING = "";
 
     @JsonCreator
     public ParquetHadoopInputRowParser(
             @JsonProperty("parseSpec") ParseSpec parseSpec,
             @JsonProperty("binaryAsString") Boolean binaryAsString,
-            @JsonProperty("parquetParser") String parquetParserString
+            @JsonProperty("parquetParser") ParquetParser parquetParser
     ) {
         this.parseSpec = parseSpec;
         this.binaryAsString = binaryAsString == null ? false : binaryAsString;
-        this.parquetParserString = parquetParserString;
-        this.parquetParser = parquetParserString == null ? null :
-                JsonUtils.readFrom(parquetParserString, ParquetParser.class);
-        this.parquetParser.setParsedFields(Field.parseFields(this.parquetParser.getFields()));
-
+        this.parquetParser = parquetParser;
         List<DimensionSchema> dimensionSchema = parseSpec.getDimensionsSpec().getDimensions();
         this.dimensions = Lists.newArrayList();
         for (DimensionSchema dim : dimensionSchema) {
@@ -74,56 +68,95 @@ public class ParquetHadoopInputRowParser implements InputRowParser<GenericRecord
      */
     @Override
     public InputRow parse(GenericRecord record) {
-//        GenericRecordAsMap genericRecordAsMap = new GenericRecordAsMap(record, false, binaryAsString);
-        final Map<String, Object> event = getEvent(this.parquetParser.getParsedFields(), record);
+        final Map<String, Object> event = getEvent(this.parquetParser.getFields(), record);
         TimestampSpec timestampSpec = parseSpec.getTimestampSpec();
         DateTime dateTime = timestampSpec.extractTimestamp(event);
         return new MapBasedInputRow(dateTime, dimensions, event);
     }
 
-
-    public final Map<String, Object> getEvent(final List<Field> fields, GenericRecord record) {
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> getEvent(final List<Field> fields, GenericRecord record) {
         final Map<String, Object> event = Maps.newHashMap();
         for (Field field : fields) {
-            if (FieldType.MAP.equals(field.getFieldType())) {
-                event.put(field.getKey().toString(),
-                        processRecord(((Map<String, Object>) record.
-                                get(field.getRootFieldName())).get(field.getKey())));
-            } else if (FieldType.ARRAY.equals(field.getFieldType())) {
-                event.put(field.getKey().toString(),
-                        processRecord(((List<Object>) record.
-                                get(field.getRootFieldName())).get(field.getIndex())));
-            } else {
-                event.put(field.getRootFieldName(), processRecord(record.get(field.getRootFieldName())));
-            }
+            event.put(field.getKey().toString(), getFieldValue(field, record));
+
         }
         return event;
     }
 
-    public static final Object processRecord(Object obj) {
-//        if (obj != null) {
-            if (obj instanceof Utf8) {
-                return obj.toString();
-            } else if (obj instanceof List) {
-                ArrayList list = new ArrayList();
-                for (Object value : (List) obj) {
-                    if (value instanceof GenericRecord)
-                        list.add(((GenericRecord) value).get(0));
+    @SuppressWarnings("unchecked")
+    private Object getFieldValue(Field field, GenericRecord record) {
+        switch (field.getFieldType()) {
+            case MAP: {
+                if (record.get(field.getRootFieldName()) != null) {
+                    //Used while debugging non queryable attributes
+                   /* System.out.println(String.format("Root Field Name : %s & Field key : %s "
+                            , field.getRootFieldName(), field.getKey()));
+                    System.out.println(String.format("Value :%s ",
+                            ((Map<String, Object>) record.get(field.getRootFieldName())).get(field.getKey())));*/
+                    return processRecord(((Map<Utf8, Object>) record.
+                            get(field.getRootFieldName())).get(field.getKey()));
                 }
-                return list;
-            } else if (obj instanceof Map) {
-                Map map = new HashMap();
-                Map incomingMap = (Map) obj;
-                for (Object key : incomingMap.keySet()) {
-                    map.put(key, incomingMap.get(key));
-                }
-                return map;
+                return null;
             }
-            return obj;
-//        } else {
-//            //Handling for dimensions with Empty event attributes
-//            return EMPTY_STRING;
+            case ARRAY:
+                return processRecord(((List<Object>) record.
+                        get(field.getRootFieldName())).get(field.getIndex()));
+            case FIELD:
+                return getFieldValue(field.getField(), record);
+            case UNION://
+                final Map<Utf8, Object> baseMap = (Map<Utf8, Object>) record.get(field.getRootFieldName());
+                if (baseMap != null) {
+                    final GenericRecord genericRecord = (GenericRecord) ((Map<Utf8, Object>) baseMap).
+                            get(field.getKey());
+                    if (genericRecord != null) {
+                        Object processObj = genericRecord.get(field.getField().getRootFieldName()) != null
+                                ? genericRecord.get(field.getField().getRootFieldName())
+                                : genericRecord.get(field.getField().getKey().toString());
+                        if (processObj != null)
+                            return processRecord(processObj);
+
+                    }
+                }
+                return null;
+            default:
+                return processRecord(record.get(field.getKey().toString()));
+        }
+    }
+
+    /**
+     * Generic method returning value
+     *
+     * @param obj
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    private Object processRecord(Object obj) {
+        if (obj instanceof Utf8) {
+            return obj.toString();
+        } else if (obj instanceof List) {
+            // For de duping PARQUET arrays like [{"element": -1}]
+            ArrayList list = new ArrayList();
+            for (Object value : (List) obj) {
+                if (value instanceof GenericRecord)
+                    list.add(((GenericRecord) value).get(0));
+            }
+            return list;
+        }
+        //MAP handling with the current implementation is to return the same
+//        else if (obj instanceof Map) {
+//            return obj;
 //        }
+        else if (obj instanceof GenericRecord) {
+            final Schema schema = ((GenericRecord) obj).getSchema();
+            if (schema != null)
+                for (Schema.Field field : schema.getFields()) {
+                    Object value = ((GenericData.Record) obj).get(field.name());
+                    if (value != null)
+                        return value;
+                }
+        }
+        return obj;
     }
 
     @JsonProperty
@@ -134,11 +167,7 @@ public class ParquetHadoopInputRowParser implements InputRowParser<GenericRecord
 
     @Override
     public InputRowParser withParseSpec(ParseSpec parseSpec) {
-        return new ParquetHadoopInputRowParser(parseSpec, binaryAsString, parquetParserString);
-    }
-
-    public String getParquetParserString() {
-        return parquetParserString;
+        return new ParquetHadoopInputRowParser(parseSpec, binaryAsString, parquetParser);
     }
 
     public ParquetParser getParquetParser() {
