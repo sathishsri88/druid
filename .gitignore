@@ -13,3 +13,8 @@ target
 *.log
 *.DS_Store
 _site
+/extensions-contrib/parquet-extensions/example/lib_bkp/
+/extensions-contrib/parquet-extensions/example/events/
+/extensions-contrib/parquet-extensions/example/primitives/
+/extensions-contrib/parquet-extensions/example/clAndServer/
+/extensions-contrib/parquet-extensions/example/parquet/
