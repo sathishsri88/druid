@@ -22,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.metamx.common.parsers.ParseException;
 import io.druid.data.input.AvroStreamInputRowParser;
 import io.druid.data.input.InputRow;
 import io.druid.data.input.MapBasedInputRow;
@@ -69,8 +70,10 @@ public class ParquetHadoopInputRowParser implements InputRowParser<GenericRecord
     @Override
     public InputRow parse(GenericRecord record) {
         final Map<String, Object> event = getEvent(this.parquetParser.getFields(), record);
-        TimestampSpec timestampSpec = parseSpec.getTimestampSpec();
-        DateTime dateTime = timestampSpec.extractTimestamp(event);
+        final TimestampSpec timestampSpec = parseSpec.getTimestampSpec();
+        final DateTime dateTime = timestampSpec.extractTimestamp(event);
+        if (dateTime == null)
+            throw new ParseException("Parsed datetime is null!");
         return new MapBasedInputRow(dateTime, dimensions, event);
     }
 
@@ -78,8 +81,11 @@ public class ParquetHadoopInputRowParser implements InputRowParser<GenericRecord
     private Map<String, Object> getEvent(final List<Field> fields, GenericRecord record) {
         final Map<String, Object> event = Maps.newHashMap();
         for (Field field : fields) {
-            event.put(field.getKey().toString(), getFieldValue(field, record));
-
+            if (field.getDimensionName() != null) {
+                event.put(field.getDimensionName(), getFieldValue(field, record));
+            } else {
+                event.put(field.getKey().toString(), getFieldValue(field, record));
+            }
         }
         return event;
     }

@@ -24,18 +24,21 @@ public final class Field {
     private final Utf8 key;
     private final FieldType fieldType;
     private final Field field;
+    private final String dimensionName;
 
     @JsonCreator
     private Field(@JsonProperty("rootFieldName") String rootFieldName,
                   @JsonProperty("index") int index,
                   @JsonProperty("key") Utf8 key,
                   @JsonProperty(value = "fieldType", required = true) FieldType fieldType,
-                  @JsonProperty("field") Field field) {
+                  @JsonProperty("field") Field field,
+                  @JsonProperty("dimensionName") String dimensionName) {
         this.rootFieldName = rootFieldName;
         this.index = index;
         this.key = key;
         this.fieldType = fieldType;
         this.field = field;
+        this.dimensionName = dimensionName;
     }
 
     public String getRootFieldName() {
@@ -58,6 +61,10 @@ public final class Field {
         return field;
     }
 
+    public String getDimensionName() {
+        return dimensionName;
+    }
+
     private static final Pattern SQUARE_PATTERN = Pattern.compile("\\[(.*?)\\]");
     private static final Pattern CURLY_PATTERN = Pattern.compile("\\((.*?)\\)");
 
@@ -65,18 +72,19 @@ public final class Field {
         Preconditions.checkNotNull(field, "Nullable field not expected while parsing field");
         if (field.contains("[")) {
             return new Field(field.substring(0, field.indexOf("[")), -1,
-                    extractKey(SQUARE_PATTERN, field), FieldType.MAP, null);
+                    extractKey(SQUARE_PATTERN, field), FieldType.MAP, null, null);
         } else if (field.contains(("("))) {
             final Utf8 key = extractKey(CURLY_PATTERN, field);
             if (StringUtils.isNumeric(key)) {
                 return new Field(field.substring(0, field.indexOf("(")), Integer.parseInt(key.toString()),
-                        key, FieldType.MAP, null);
+                        key, FieldType.MAP, null, null);
             } else {
                 return new Field(field.substring(0, field.indexOf("(")), -1,
-                        key, FieldType.MAP, null);
+                        key, FieldType.MAP, null, null);
             }
         } else {
-            return new Field(EMPTY_STR.toString(), DEF_INDEX, new Utf8(field), FieldType.STRING, null);
+            return new Field(EMPTY_STR.toString(), DEF_INDEX, new Utf8(field), FieldType.STRING, null,
+                    null);
         }
     }
 

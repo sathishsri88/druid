@@ -18,7 +18,9 @@
  */
 package io.druid.data.input.parquet;
 
+import com.google.common.collect.Lists;
 import io.druid.data.input.InputRow;
+import io.druid.data.input.MapBasedInputRow;
 import io.druid.indexer.HadoopDruidIndexerConfig;
 import io.druid.indexer.path.StaticPathSpec;
 import org.apache.avro.generic.GenericRecord;
@@ -36,6 +38,10 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -132,7 +138,7 @@ public class DruidParquetInputTest {
 
     @Test
     public void testELMOCldIngestionParser() throws IOException, InterruptedException {
-        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/spec/elmo_cld_ingest_spec.json"));
+        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/spec/pangea_cust_daily_ingest_spec.json"));
         Job job = Job.getInstance(new Configuration());
         config.intoConfiguration(job);
         GenericRecord data = getFirstRecord(job, ((StaticPathSpec) config.getPathSpec()).getPaths());
@@ -143,13 +149,98 @@ public class DruidParquetInputTest {
 
     @Test
     public void testPangeaCldIngestionParser() throws IOException, InterruptedException {
-        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/spec/pangea_cld_ingest_spec.json"));
+        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/spec/pangea_cust_daily_ingest_spec.json"));
         Job job = Job.getInstance(new Configuration());
         config.intoConfiguration(job);
-        GenericRecord data = getFirstRecord(job, ((StaticPathSpec) config.getPathSpec()).getPaths());
+        List<GenericRecord> genericRecords = getNRecords(job, ((StaticPathSpec) config.getPathSpec()).getPaths(), 200);
+        List<MapBasedInputRow> parsedRecords = Lists.newArrayList();
+        List<String> mapKeys = Lists.newArrayList("attributes", "cldAttributes", "cometAttributes");
+        for (GenericRecord record : genericRecords) {
+            parsedRecords.add((MapBasedInputRow) config.getParser().parse(record));
+        }
+        for (int i = 0; i < parsedRecords.size(); i++) {
+            GenericRecord genericRecord = genericRecords.get(i);
+            Map<String, Map<String, Object>> attributesMap = new HashMap<>();
+            for (String key : mapKeys) {
+                attributesMap.put(key, (Map<String, Object>) genericRecord.get(key));
+            }
+            MapBasedInputRow parsedRecord = parsedRecords.get(i);
+            for (String key : parsedRecord.getEvent().keySet()) {
+                Object parsedValue = parsedRecord.getEvent().get(key);
+                Object eventValue = getValue(key, attributesMap);
+                if (eventValue != null) {
+                    try {
+                        boolean equals = eventValue.toString().equals(parsedValue);
+                        if (!equals)
+                            System.out.println("Unequality b/w key : " + key + " Value (a,b) : (" + parsedValue + "," + eventValue + ")");
+//                        else
+//                            System.out.println("Equality b/w key : " + key + " Value (a,b) : (" + parsedValue + "," + eventValue + ")");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("Unequality b/w key : " + key + " Value (a,b) : (" + parsedValue + "," + eventValue + ")");
+                    }
+                }
+//                else
+//                    System.out.println("EventValue NULL b/w key : " + key + " Value (a) : (" + eventValue + ")");
+            }
+        }
+        System.out.println(parsedRecords.get(0));
+    }
 
-        InputRow row = config.getParser().parse(data);
-        System.out.println(row);
+
+    @Test
+    public void testElmoClientIngestionParser() throws IOException, InterruptedException {
+        HadoopDruidIndexerConfig config = HadoopDruidIndexerConfig.fromFile(new File("example/spec/elmo_client_druid_intra_spec.json"));
+        Job job = Job.getInstance(new Configuration());
+        config.intoConfiguration(job);
+        List<GenericRecord> genericRecords = getNRecords(job, ((StaticPathSpec) config.getPathSpec()).getPaths(), 20000000);
+        List<MapBasedInputRow> parsedRecords = Lists.newArrayList();
+        List<String> mapKeys = Lists.newArrayList("attributes", "cldAttributes", "cometAttributes");
+        for (GenericRecord record : genericRecords) {
+            parsedRecords.add((MapBasedInputRow) config.getParser().parse(record));
+        }
+        for (int i = 0; i < parsedRecords.size(); i++) {
+            GenericRecord genericRecord = genericRecords.get(i);
+            Map<String, Map<String, Object>> attributesMap = new HashMap<>();
+            for (String key : mapKeys) {
+                attributesMap.put(key, (Map<String, Object>) genericRecord.get(key));
+            }
+            MapBasedInputRow parsedRecord = parsedRecords.get(i);
+            for (String key : parsedRecord.getEvent().keySet()) {
+                Object parsedValue = parsedRecord.getEvent().get(key);
+                Object eventValue = getValue(key, attributesMap);
+                if (eventValue != null) {
+                    try {
+                        boolean equals = eventValue.toString().equals(parsedValue);
+                        if (!equals)
+                            System.out.println("Unequality b/w key : " + key + " Value (a,b) : (" + parsedValue + "," + eventValue + ")");
+//                        else
+//                            System.out.println("Equality b/w key : " + key + " Value (a,b) : (" + parsedValue + "," + eventValue + ")");
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        System.out.println("Unequality b/w key : " + key + " Value (a,b) : (" + parsedValue + "," + eventValue + ")");
+                    }
+                }
+//                else
+//                    System.out.println("EventValue NULL b/w key : " + key + " Value (a) : (" + eventValue + ")");
+            }
+        }
+        System.out.println(parsedRecords.get(0));
+    }
+
+    private Object getValue(String key, Map<String, Map<String, Object>> attributesMap) {
+        if (attributesMap != null) {
+            for (String mapKey : attributesMap.keySet()) {
+                Map<String, Object> attributes = attributesMap.get(mapKey);
+                if (attributes != null && attributes.containsKey(new Utf8(key))) {
+                    return attributes.get(new Utf8(key));
+//                    if (attributes.get(key) != null) {
+//                        return attributes.get(key).toString();
+//                    }
+                }
+            }
+        }
+        return null;
     }
 
     @Test
@@ -182,6 +273,27 @@ public class DruidParquetInputTest {
         GenericRecord data = (GenericRecord) reader.getCurrentValue();
         reader.close();
         return data;
+    }
+
+    private List<GenericRecord> getNRecords(Job job, String parquetPath, int size) throws IOException, InterruptedException {
+        File testFile = new File(parquetPath);
+        Path path = new Path(testFile.getAbsoluteFile().toURI());
+        FileSplit split = new FileSplit(path, 0, testFile.length(), null);
+
+        DruidParquetInputFormat inputFormat = ReflectionUtils.newInstance(DruidParquetInputFormat.class, job.getConfiguration());
+        TaskAttemptContext context = new TaskAttemptContextImpl(job.getConfiguration(), new TaskAttemptID());
+        RecordReader reader = inputFormat.createRecordReader(split, context);
+
+        reader.initialize(split, context);
+        List<GenericRecord> records = Lists.newArrayListWithCapacity(size);
+        int cnt = 0;
+        while (reader.nextKeyValue() && cnt < size) {
+//            System.out.println(reader.getCurrentKey() + " - " + reader.getCurrentValue());
+            records.add((GenericRecord) reader.getCurrentValue());
+            cnt++;
+        }
+        reader.close();
+        return records;
     }
 
 }
