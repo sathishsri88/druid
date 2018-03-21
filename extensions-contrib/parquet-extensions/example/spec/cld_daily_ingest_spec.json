@@ -1,0 +1,1792 @@
+{
+  "type": "index_hadoop",
+  "spec": {
+    "dataSchema": {
+      "dataSource": "elmo_cld",
+      "parser": {
+        "type": "parquet",
+        "binaryAsString": true,
+        "parquetParser": {
+          "fields": [
+            {
+              "rootFieldName": "headers",
+              "key": "ts_message_create",
+              "fieldType": "UNION",
+              "field": {
+                "key": "member1",
+                "rootFieldName": "member1",
+                "fieldType": "MAP"
+              }
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "eventId",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "isElmo",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "experiencedExperiments",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "experimentNames",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "experimentVersions",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "experiencedTreatments",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "treatmentVersions",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "treatmentNames",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "customer_id",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "attributes",
+              "index": -1,
+              "key": "isp_name",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributes",
+              "index": -1,
+              "key": "isp_user_type",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributes",
+              "index": -1,
+              "key": "language_id",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributes",
+              "index": -1,
+              "key": "locale",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "component_name",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "page_name",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "page_group",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "os",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "browser_version",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "browser_type",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "decr_account_number",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "decr_merchant_account_number",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "decr_transaction_id",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "device_id",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "device",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "device_model",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "ip",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "connection_type",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "mobile_device_name",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "user_logged_in",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "visitor_id",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "cookie_id",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "bot",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "enrich",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "country_iso_code",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "country_name",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "continent",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "sw",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "screen_height",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "device_height",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "device_width",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "event_type",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "attributesmap",
+              "index": -1,
+              "key": "event_identifier",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "prmry_card_added_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "business_type",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "dc_exp_dt_year",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "emailable_status_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "cust_intent",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "is_debit_card",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_received_dispute_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "wc_page_last_visit_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "is_student_acct_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "cust_age_group_code",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "acct_locked_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "is_guest_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "first_recv_pmt_txn_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "mobile_app_dwnld_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "first_cb_recv_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "acct_rstrd_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "email_spam_policy_change_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "cust_busn_seg_key",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "sub_indy_id",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "guest_wax_acct_upgrde_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "busn_name",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_ach_confirm_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "dc_exp_dt_mth",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "yob",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "busn_addr_state",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "frs_optin_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "prmry_card_removed_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "prmer_to_busn_upgrde_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "cip_status",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "mkt_sub_regn_key",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "mobile_acqstn_chnl_desc",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "first_pmt_sent_recv_flag",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "dpc_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_email_open_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_received_chargeback_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "merc_website_url",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "account_type",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "prmry_email_vrfd_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "busn_addr_zip_code",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "cust_actv_seg_key",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "prmry_card_auth_credit_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "prmry_reside_cntry_code",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "retrv_forgot_pwd_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "first_sent_pmt_txn_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "pan_verified_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "mobile_app_login_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_card_added_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "wc_loan_tkn_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "wc_decln_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_pmt_txn_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "prmry_ach_added_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_web_access_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_recv_pmt_txn_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "frs_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "wc_whitelist_mbr_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "ppme_slug_active_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_card_dcline_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_sent_pmt_txn_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "ppme_attr_type_val",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "email_spam_dev_ntwrk_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "merch_cntry_code",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "prmry_addr_state",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "busn_to_prsnl_dwngrde_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "acct_rstrd_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "ppme_page_last_visit_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_ach_added_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "prmry_ach_removed_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_email_delivered_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "busn_addr_cntry_code",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "prmry_email_addr",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "cust_engagmnt_seg_key",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_pmt_sent_recv_flag",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "prmry_addr_city",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "acct_cre_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "gender",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "prmry_ach_vrfd_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "wc_applied_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "cust_fin_rptg_cntry_code",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "is_credit_card",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "email_spam_promos_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "pp_here_terminal_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "indy_id",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "mobile_num",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "email_spam_newsletter_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_ach_decline_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "prmry_card_expired_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "prsnl_to_prmr_upgrde_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "first_ach_decline_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_email_click_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "tot_dispute_received",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "first_pmt_txn_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "email_bnce_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "pphere_association_name",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_card_dcline_rsn",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "wc_loan_amt_curr_code",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "first_fraud_reversal_recv_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "pph_signup_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "is_large_merchant_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "pp_here_actvtn_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "acct_clsd_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "prmry_ach_auth_deposit_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_card_auth_verify_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_app_login_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "merch_min_acct_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "ppme_slug_cre_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "wc_eligible_amt_curr_code",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "open_wax_acct_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "email_confirmed_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_topup_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "prmry_card_vrfd_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "true_indy_name",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "is_account_managed_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "wc_actv_loan_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "wc_repaid_amt_curr_code",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "cust_first_name",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "ever_ach_vrfd_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "is_le_merchant_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "kyc_status",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "wc_hist_loan_count",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "cust_curr_code",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "acct_locked_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "busn_to_prmer_dwngrde_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_fraud_rvsl_recv_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "merc_website_flg_proxy",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "amex_card_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "email_spam_slr_tips_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "prmry_addr_zip_code",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "cust_acct_clsfn_key",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "wc_approved_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "wc_loan_repaid_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "glb_suppression_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "email_spam_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "cust_lang_code",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "prmry_email_domain",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "is_multi_currency_bal_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "casual_seller_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "first_odr_recv_case_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "busn_addr_city",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "cust_last_name",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "balance_effective_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "IN_KYC_COMPLETE_Y_N",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "acct_clsd_y_n",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "mkt_regn_code",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_received_claim_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "prmr_to_prsnl_dwngrde_dt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "wc_eligible_amt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_pmt_txn_usd_amt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "first_sent_pmt_txn_amt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "party_key",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "wc_repaid_amt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "actv_conf_bank_accts_cnt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "first_sent_pmt_txn_usd_amt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "tot_bal_local_currency",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "tot_topup_last12m",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "ntpv_12_mth_sent_usd_amt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_sent_pmt_txn_amt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_sent_pmt_txn_usd_amt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "tot_recv_pmt_txn_cnt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "tot_bal_equiv_usd_amt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "wc_loan_amt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "actv_cc_on_file_cnt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "tot_claims_received",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "tot_recv_pmt_txn_amt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "tot_send_pmt_txn_cnt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "tot_chargebacks_received",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_recv_pmt_txn_amt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "first_recv_pmt_txn_usd_amt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "ntpv_12_mth_sent_cnt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "last_recv_pmt_txn_usd_amt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "actv_bank_accts_on_file_cnt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "actv_conf_cc_on_file_cnt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "tot_rev_usd_amt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "tot_non_topup_last12m",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "tot_send_pmt_txn_amt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "tot_rev_recv_usd_amt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "first_pmt_txn_usd_amt",
+              "fieldType": "MAP"
+            },
+            {
+              "rootFieldName": "cld_attributes",
+              "index": -1,
+              "key": "tot_rev_send_usd_amt",
+              "fieldType": "MAP"
+            }
+          ]
+        },
+        "parseSpec": {
+          "format": "timeAndDims",
+          "timestampSpec": {
+            "column": "ts_message_create",
+            "format": "millis"
+          },
+          "dimensionsSpec": {
+            "dimensions": [
+              "experiencedexperiments",
+              "experimentnames",
+              "experimentversions",
+              "experiencedtreatments",
+              "treatmentnames",
+              "treatmentversions",
+              "eventdate",
+              "isp_name",
+              "isp_user_type",
+              "language_id",
+              "locale",
+              "component_name",
+              "page_name",
+              "page_group",
+              "os",
+              "browser_version",
+              "browser_type",
+              "device_id",
+              "device",
+              "device_model",
+              "connection_type",
+              "mobile_device_name",
+              "user_logged_in",
+              "bot",
+              "enrich",
+              "country_iso_code",
+              "country_name",
+              "continent",
+              "sw",
+              "screen_height",
+              "device_height",
+              "device_width",
+              "event_type",
+              "event_identifier",
+              "email_spam_surveys_y_n",
+              "prmry_card_added_dt",
+              "business_type",
+              "dc_exp_dt_year",
+              "emailable_status_y_n",
+              "cust_intent",
+              "is_debit_card",
+              "last_received_dispute_dt",
+              "wc_page_last_visit_dt",
+              "is_student_acct_y_n",
+              "cust_age_group_code",
+              "acct_locked_dt",
+              "is_guest_y_n",
+              "first_recv_pmt_txn_dt",
+              "mobile_app_dwnld_y_n",
+              "first_cb_recv_dt",
+              "acct_rstrd_dt",
+              "email_spam_policy_change_y_n",
+              "cust_busn_seg_key",
+              "sub_indy_id",
+              "guest_wax_acct_upgrde_dt",
+              "busn_name",
+              "last_ach_confirm_dt",
+              "dc_exp_dt_mth",
+              "yob",
+              "busn_addr_state",
+              "frs_optin_dt",
+              "prmry_card_removed_y_n",
+              "prmer_to_busn_upgrde_dt",
+              "cip_status",
+              "mkt_sub_regn_key",
+              "mobile_acqstn_chnl_desc",
+              "first_pmt_sent_recv_flag",
+              "dpc_y_n",
+              "last_email_open_dt",
+              "last_received_chargeback_dt",
+              "merc_website_url",
+              "account_type",
+              "prmry_email_vrfd_dt",
+              "busn_addr_zip_code",
+              "cust_actv_seg_key",
+              "prmry_card_auth_credit_dt",
+              "prmry_reside_cntry_code",
+              "retrv_forgot_pwd_dt",
+              "first_sent_pmt_txn_dt",
+              "pan_verified_y_n",
+              "mobile_app_login_y_n",
+              "last_card_added_dt",
+              "wc_loan_tkn_dt",
+              "wc_decln_dt",
+              "last_pmt_txn_dt",
+              "prmry_ach_added_dt",
+              "last_web_access_dt",
+              "last_recv_pmt_txn_dt",
+              "frs_y_n",
+              "wc_whitelist_mbr_y_n",
+              "ppme_slug_active_y_n",
+              "last_card_dcline_dt",
+              "last_sent_pmt_txn_dt",
+              "ppme_attr_type_val",
+              "email_spam_dev_ntwrk_y_n",
+              "merch_cntry_code",
+              "prmry_addr_state",
+              "busn_to_prsnl_dwngrde_dt",
+              "acct_rstrd_y_n",
+              "ppme_page_last_visit_dt",
+              "last_ach_added_dt",
+              "prmry_ach_removed_dt",
+              "last_email_delivered_dt",
+              "busn_addr_cntry_code",
+              "cust_engagmnt_seg_key",
+              "last_pmt_sent_recv_flag",
+              "prmry_addr_city",
+              "acct_cre_dt",
+              "gender",
+              "prmry_ach_vrfd_dt",
+              "wc_applied_dt",
+              "cust_fin_rptg_cntry_code",
+              "is_credit_card",
+              "email_spam_promos_y_n",
+              "pp_here_terminal_y_n",
+              "indy_id",
+              "email_spam_newsletter_y_n",
+              "last_ach_decline_dt",
+              "prmry_card_expired_y_n",
+              "prsnl_to_prmr_upgrde_dt",
+              "first_ach_decline_dt",
+              "last_email_click_dt",
+              "tot_dispute_received",
+              "first_pmt_txn_dt",
+              "email_bnce_dt",
+              "pphere_association_name",
+              "last_card_dcline_rsn",
+              "wc_loan_amt_curr_code",
+              "first_fraud_reversal_recv_dt",
+              "pph_signup_dt",
+              "is_large_merchant_y_n",
+              "pp_here_actvtn_dt",
+              "acct_clsd_dt",
+              "prmry_ach_auth_deposit_dt",
+              "last_card_auth_verify_dt",
+              "last_app_login_dt",
+              "merch_min_acct_y_n",
+              "ppme_slug_cre_dt",
+              "wc_eligible_amt_curr_code",
+              "open_wax_acct_y_n",
+              "email_confirmed_y_n",
+              "last_topup_dt",
+              "prmry_card_vrfd_dt",
+              "true_indy_name",
+              "is_account_managed_y_n",
+              "wc_actv_loan_y_n",
+              "wc_repaid_amt_curr_code",
+              "cust_first_name",
+              "ever_ach_vrfd_y_n",
+              "is_le_merchant_y_n",
+              "kyc_status",
+              "wc_hist_loan_count",
+              "cust_curr_code",
+              "acct_locked_y_n",
+              "busn_to_prmer_dwngrde_dt",
+              "last_fraud_rvsl_recv_dt",
+              "merc_website_flg_proxy",
+              "amex_card_y_n",
+              "email_spam_slr_tips_y_n",
+              "prmry_addr_zip_code",
+              "cust_acct_clsfn_key",
+              "wc_approved_dt",
+              "wc_loan_repaid_dt",
+              "glb_suppression_y_n",
+              "email_spam_dt",
+              "cust_lang_code",
+              "prmry_email_domain",
+              "is_multi_currency_bal_y_n",
+              "casual_seller_y_n",
+              "first_odr_recv_case_dt",
+              "busn_addr_city",
+              "cust_last_name",
+              "balance_effective_dt",
+              "IN_KYC_COMPLETE_Y_N",
+              "acct_clsd_y_n",
+              "mkt_regn_code",
+              "last_received_claim_dt",
+              "prmr_to_prsnl_dwngrde_dt"
+            ],
+            "dimensionExclusions": [
+            ],
+            "spatialDimensions": [
+            ]
+          }
+        }
+      },
+      "metricsSpec": [
+        {
+          "type": "count",
+          "name": "count"
+        },
+        {
+          "type": "hyperUnique",
+          "name": "dist_visits",
+          "fieldName": "visitor_id"
+        },
+        {
+          "type": "hyperUnique",
+          "name": "dist_visitors",
+          "fieldName": "cookie_id"
+        },
+        {
+          "type": "hyperUnique",
+          "name": "dist_users",
+          "fieldName": "decr_account_number"
+        },
+        {
+          "type": "hyperUnique",
+          "name": "dist_merchants",
+          "fieldName": "decr_merchant_account_number"
+        },
+        {
+          "type": "hyperUnique",
+          "name": "dist_transactions",
+          "fieldName": "decr_transaction_id"
+        },
+        {
+          "type": "hyperUnique",
+          "name": "dist_ip",
+          "fieldName": "ip"
+        },
+        {
+          "type": "hyperUnique",
+          "name": "dist_party_key",
+          "fieldName": "party_key"
+        },
+        {
+          "type": "doubleSum",
+          "name": "wc_eligible_amt",
+          "fieldName": "wc_eligible_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "last_pmt_txn_usd_amt",
+          "fieldName": "last_pmt_txn_usd_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "first_sent_pmt_txn_amt",
+          "fieldName": "first_sent_pmt_txn_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "wc_repaid_amt",
+          "fieldName": "wc_repaid_amt"
+        },
+        {
+          "type": "longSum",
+          "name": "actv_conf_bank_accts_cnt",
+          "fieldName": "actv_conf_bank_accts_cnt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "first_sent_pmt_txn_usd_amt",
+          "fieldName": "first_sent_pmt_txn_usd_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_bal_local_currency",
+          "fieldName": "tot_bal_local_currency"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_topup_last12m",
+          "fieldName": "tot_topup_last12m"
+        },
+        {
+          "type": "doubleSum",
+          "name": "last_sent_pmt_txn_amt",
+          "fieldName": "last_sent_pmt_txn_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "last_sent_pmt_txn_usd_amt",
+          "fieldName": "last_sent_pmt_txn_usd_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_recv_pmt_txn_cnt",
+          "fieldName": "tot_recv_pmt_txn_cnt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_bal_equiv_usd_amt",
+          "fieldName": "tot_bal_equiv_usd_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "wc_loan_amt",
+          "fieldName": "wc_loan_amt"
+        },
+        {
+          "type": "longSum",
+          "name": "actv_cc_on_file_cnt",
+          "fieldName": "actv_cc_on_file_cnt"
+        },
+        {
+          "type": "longSum",
+          "name": "tot_claims_received",
+          "fieldName": "tot_claims_received"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_recv_pmt_txn_amt",
+          "fieldName": "tot_recv_pmt_txn_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_send_pmt_txn_cnt",
+          "fieldName": "tot_send_pmt_txn_cnt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_chargebacks_received",
+          "fieldName": "tot_chargebacks_received"
+        },
+        {
+          "type": "doubleSum",
+          "name": "last_recv_pmt_txn_amt",
+          "fieldName": "last_recv_pmt_txn_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "first_recv_pmt_txn_usd_amt",
+          "fieldName": "first_recv_pmt_txn_usd_amt"
+        },
+        {
+          "type": "longSum",
+          "name": "ntpv_12_mth_sent_cnt",
+          "fieldName": "ntpv_12_mth_sent_cnt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "last_recv_pmt_txn_usd_amt",
+          "fieldName": "last_recv_pmt_txn_usd_amt"
+        },
+        {
+          "type": "longSum",
+          "name": "actv_bank_accts_on_file_cnt",
+          "fieldName": "actv_bank_accts_on_file_cnt"
+        },
+        {
+          "type": "longSum",
+          "name": "actv_conf_cc_on_file_cnt",
+          "fieldName": "actv_conf_cc_on_file_cnt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_rev_usd_amt",
+          "fieldName": "tot_rev_usd_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_non_topup_last12m",
+          "fieldName": "tot_non_topup_last12m"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_send_pmt_txn_amt",
+          "fieldName": "tot_send_pmt_txn_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_rev_recv_usd_amt",
+          "fieldName": "tot_rev_recv_usd_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "first_pmt_txn_usd_amt",
+          "fieldName": "first_pmt_txn_usd_amt"
+        },
+        {
+          "type": "doubleSum",
+          "name": "tot_rev_send_usd_amt",
+          "fieldName": "tot_rev_send_usd_amt"
+        }
+      ],
+      "granularitySpec": {
+        "type": "uniform",
+        "segmentGranularity": "DAY",
+        "queryGranularity": "DAY",
+        "rollup": true,
+        "intervals": [
+          "2017-07-26T00:00:00.000Z/2017-07-27T00:59:59.000Z"
+        ]
+      }
+    },
+    "ioConfig": {
+      "type": "hadoop",
+      "inputSpec": {
+        "type": "static",
+        "inputFormat": "io.druid.data.input.parquet.DruidParquetInputFormat",
+        "paths": "/sys/dt/elmo/hive/cld_test_nvl/*"
+      },
+      "metadataUpdateSpec": null,
+      "segmentOutputPath": null
+    },
+    "tuningConfig": {
+      "type": "hadoop",
+      "partitionsSpec": {
+        "type": "hashed",
+        "targetPartitionSize": 750000,
+        "maxPartitionSize": 750000,
+        "assumeGrouped": false,
+        "numShards": -1,
+        "partitionDimensions": [
+        ]
+      },
+      "shardSpecs": {
+      },
+      "indexSpec": {
+        "bitmap": {
+          "type": "concise"
+        },
+        "dimensionCompression": "lz4",
+        "metricCompression": "lz4",
+        "longEncoding": "longs"
+      },
+      "maxRowsInMemory": 75000,
+      "leaveIntermediate": true,
+      "cleanupOnFailure": true,
+      "overwriteFiles": false,
+      "ignoreInvalidRows": false,
+      "jobProperties": {
+        "hdp.version": "2.5.3.58-3",
+        "mapreduce.job.user.classpath.first": "true",
+        "mapreduce.task.timeout": "1800000",
+        "mapreduce.map.memory.mb": "8096",
+        "mapreduce.map.java.opts": "-server -Xmx3072m -Duser.timezone=UTC -Dfile.encoding=UTF-8",
+        "mapreduce.reduce.memory.mb": "10240",
+        "mapreduce.reduce.java.opts": "-server -Xmx8192m -Duser.timezone=UTC -Dfile.encoding=UTF-8",
+        "mapreduce.job.queuename": "experimentation",
+        "mapred.child.ulimit": "16777216",
+        "mapreduce.map.output.compress": "true",
+        "mapred.map.output.compress.codec": "org.apache.hadoop.io.compress.SnappyCodec"
+      },
+      "combineText": false,
+      "useCombiner": false,
+      "buildV9Directly": false,
+      "numBackgroundPersistThreads": 0,
+      "forceExtendableShardSpecs": false
+    },
+    "uniqueId": "715f31321096480b869aca2cc9c5d252"
+  },
+  "hadoopDependencyCoordinates": [
+    "org.apache.hadoop:hadoop-client:2.6.0"
+  ]
+}

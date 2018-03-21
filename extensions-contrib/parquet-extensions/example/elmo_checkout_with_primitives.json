@@ -1,0 +1,199 @@
+{
+  "type":"index_hadoop",
+  "spec":{
+    "dataSchema":{
+      "dataSource":"elmo_checkout_t1",
+      "parser": {
+        "type": "parquet",
+        "binaryAsString": true,
+        "parquetParser": "{\"fields\":[\"eventDate\",\"experiencedExperiment\",\"experiencedTreatment\",\"rcvr_cntry_code\",\"sndr_cntry_code\",\"rt_rp_txn_y_n\",\"platform\",\"product\",\"soln_type_code\",\"chkout_flow\",\"flow_type_code\",\"design\",\"ec_user_type\",\"mobile_platform\",\"integration_type_code\",\"setec_y_n\",\"doec_y_n\",\"setec_txn_curr_code\",\"doec_txn_curr_code\",\"frst_lndg_page\",\"lst_lndg_page\",\"browser_type\",\"browser_ver\",\"client_os\",\"cntxt_type\",\"busn_name\",\"guest_flow_y_n\",\"login_attmpt_y_n\",\"starts\",\"dones\",\"setec_txn_amt\",\"doec_txn_amt\",\"net_cnt\",\"ntpv_usd_amt\",\"net_loss\",\"total_cost\",\"total_revenue\",\"balance_tpv\",\"bank_tpv\",\"credit_card_tpv\",\"debit_card_tpv\",\"buyer_credit_tpv\"]}",
+        "parseSpec": {
+          "format": "timeAndDims",
+          "timestampSpec": {
+            "column": "eventDate",
+            "format": "yyyy-MM-dd"
+          },
+          "dimensionsSpec": {
+            "dimensions": [
+              "experiencedExperiment",
+              "experiencedTreatment",
+              "rcvr_cntry_code",
+              "sndr_cntry_code",
+              "rt_rp_txn_y_n",
+              "platform",
+              "product",
+              "soln_type_code",
+              "chkout_flow",
+              "flow_type_code",
+              "design",
+              "ec_user_type",
+              "mobile_platform",
+              "integration_type_code",
+              "setec_y_n",
+              "doec_y_n",
+              "setec_txn_curr_code",
+              "doec_txn_curr_code",
+              "frst_lndg_page",
+              "lst_lndg_page",
+              "browser_type",
+              "browser_ver",
+              "client_os",
+              "cntxt_type",
+              "busn_name",
+              "guest_flow_y_n",
+              "login_attmpt_y_n"
+            ],
+            "dimensionExclusions": [
+
+            ],
+            "spatialDimensions": [
+
+            ]
+          }
+        }
+      },
+      "metricsSpec":[
+        {
+          "type":"longSum",
+          "name":"starts",
+          "fieldName":"starts"
+        },
+        {
+          "type":"longSum",
+          "name":"dones",
+          "fieldName":"dones"
+        },
+        {
+          "type":"longSum",
+          "name":"setec_txn_amt",
+          "fieldName":"setec_txn_amt"
+        },
+        {
+          "type":"longSum",
+          "name":"doec_txn_amt",
+          "fieldName":"doec_txn_amt"
+        },
+        {
+          "type":"longSum",
+          "name":"net_cnt",
+          "fieldName":"net_cnt"
+        },
+        {
+          "type":"doubleSum",
+          "name":"ntpv_usd_amt",
+          "fieldName":"ntpv_usd_amt"
+        },
+        {
+          "type":"doubleSum",
+          "name":"net_loss",
+          "fieldName":"net_loss"
+        },
+        {
+          "type":"doubleSum",
+          "name":"total_cost",
+          "fieldName":"total_cost"
+        },
+        {
+          "type":"doubleSum",
+          "name":"total_revenue",
+          "fieldName":"total_revenue"
+        },
+        {
+          "type":"doubleSum",
+          "name":"balance_tpv",
+          "fieldName":"balance_tpv"
+        },
+        {
+          "type":"doubleSum",
+          "name":"bank_tpv",
+          "fieldName":"bank_tpv"
+        },
+        {
+          "type":"doubleSum",
+          "name":"credit_card_tpv",
+          "fieldName":"credit_card_tpv"
+        },
+        {
+          "type":"doubleSum",
+          "name":"debit_card_tpv",
+          "fieldName":"debit_card_tpv"
+        },
+        {
+          "type":"doubleSum",
+          "name":"buyer_credit_tpv",
+          "fieldName":"buyer_credit_tpv"
+        }
+      ],
+      "granularitySpec":{
+        "type":"uniform",
+        "segmentGranularity":"day",
+        "rollup":true,
+        "intervals":[
+          "2017-05-06/2017-05-07"
+        ]
+      }
+    },
+    "ioConfig":{
+      "type":"hadoop",
+      "inputSpec":{
+        "type":"static",
+        "inputFormat": "io.druid.data.input.parquet.DruidParquetInputFormat",
+        "paths":"example/primitives/part-r-00000-d4364053-be8e-44d6-97f0-03489dec8977.gz.parquet"
+      },
+      "segmentOutputPath": "/tmp/segments"
+    },
+    "tuningConfig":{
+      "type":"hadoop",
+      "workingPath": "tmp/working_path",
+      "version":"2017-02-09T07:36:09.249Z",
+      "partitionsSpec":{
+        "type":"hashed",
+        "targetPartitionSize":500000,
+        "maxPartitionSize":750000,
+        "assumeGrouped":false,
+        "numShards":-1,
+        "partitionDimensions":[
+
+        ]
+      },
+      "shardSpecs":{
+
+      },
+      "indexSpec":{
+        "bitmap":{
+          "type":"concise"
+        },
+        "dimensionCompression":"lz4",
+        "metricCompression":"lz4",
+        "longEncoding":"longs"
+      },
+      "maxRowsInMemory":75000,
+      "leaveIntermediate":true,
+      "cleanupOnFailure":true,
+      "overwriteFiles":false,
+      "ignoreInvalidRows":false,
+      "jobProperties":{
+        "hdp.version": "2.5.3.58-3",
+        "mapreduce.job.user.classpath.first": "true",
+        "mapreduce.task.timeout": "1800000",
+        "mapreduce.map.memory.mb": "2048",
+        "mapreduce.map.java.opts": "-server -Xmx3072m -Duser.timezone=UTC -Dfile.encoding=UTF-8",
+        "mapreduce.reduce.memory.mb": "2048",
+        "mapreduce.reduce.java.opts": "-server -Xmx8192m -Duser.timezone=UTC -Dfile.encoding=UTF-8",
+        "mapreduce.job.queuename": "experimentation",
+        "mapred.child.ulimit": "16777216",
+        "mapreduce.map.output.compress": "true",
+        "mapred.map.output.compress.codec": "org.apache.hadoop.io.compress.GzipCodec"
+      },
+      "combineText":false,
+      "useCombiner":false,
+      "buildV9Directly":false,
+      "numBackgroundPersistThreads":0,
+      "forceExtendableShardSpecs":false
+    }
+  },
+  "hadoopDependencyCoordinates":[
+    "org.apache.hadoop:hadoop-client:2.6.0.2.2.9.9-2"
+  ],
+  "dataSource":"elmo_checkout_t1"
+}

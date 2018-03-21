@@ -1,0 +1,488 @@
+{
+  "type": "index_hadoop",
+  "spec": {
+    "dataSchema": {
+      "dataSource": "comet",
+      "parser": {
+        "type": "parquet",
+        "binaryAsString": true,
+        "parquetParser": {
+          "fields": [
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "visitor_id",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "cust_id",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "geo_cntry",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "ip_addr",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "browser_type",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "browser_ver",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "client_os",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "mobile_os",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "mobile_app_version",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "devc_type_name",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "mobile_devc",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "bot_flag",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "devc_name",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "prspct_chnl",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "is_raw_prspct_y_n",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "is_qfd_prspct_y_n",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "qfd_prspct_type_code",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "is_signup_start_y_n",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "ss_prspct_type_code",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "is_signup_cmplt_y_n",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "sc_prspct_type_code",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "is_upgrde_cmplt_y_n",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "upgrde_evnt_type",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "acqstn_type_code",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "is_repeat_prospect_indicator",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "cust_fin_rptg_cntry_code",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "cust_acct_type_code",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "cust_signup_dt",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "is_upsell_start_y_n",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "ups_prspct_type_code",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "is_upsell_cmplt_y_n",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "ups_cmplt_prspct_type_code",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "is_tot_visitor_y_n",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "is_upgrade_start_y_n",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "upg_start_prspct_type_code",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "is_spanning",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "prspct_chnl_prev_day",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "eu_page_title",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "eu_page_grp_name",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "eu_page_name",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "eu_page_lnk",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "referrer_domain",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "scndry_prty_cookie_id",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "rosetta_lang_cd",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "mobile_device_id",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "referring_url",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "evnt_page_url",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "cnt_pv_prspct",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "cnt_sessn_prspct_pv",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "cnt_sessn_signup_start_pv",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "tfs_category",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "channel_pros_tag",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "channel_flow",
+              "fieldType": "STRING"
+            },
+            {
+              "rootFieldName": "",
+              "index": -1,
+              "key": "event_date",
+              "fieldType": "STRING"
+            }
+          ]
+        },
+        "parseSpec": {
+          "format": "timeAndDims",
+          "timestampSpec": {
+            "column": "event_date",
+            "format": "yyyy-MM-dd"
+          },
+          "dimensionsSpec": {
+            "dimensions": [
+              "geo_cntry",
+              "ip_addr",
+              "browser_type",
+              "browser_ver",
+              "client_os",
+              "mobile_os",
+              "mobile_app_version",
+              "devc_type_name",
+              "mobile_devc",
+              "bot_flag",
+              "devc_name",
+              "prspct_chnl",
+              "is_raw_prspct_y_n",
+              "is_qfd_prspct_y_n",
+              "qfd_prspct_type_code",
+              "is_signup_start_y_n",
+              "ss_prspct_type_code",
+              "is_signup_cmplt_y_n",
+              "sc_prspct_type_code",
+              "is_upgrde_cmplt_y_n",
+              "upgrde_evnt_type",
+              "acqstn_type_code",
+              "is_repeat_prospect_indicator",
+              "cust_fin_rptg_cntry_code",
+              "cust_acct_type_code",
+              "cust_signup_dt",
+              "is_upsell_start_y_n",
+              "ups_prspct_type_code",
+              "is_upsell_cmplt_y_n",
+              "ups_cmplt_prspct_type_code",
+              "is_tot_visitor_y_n",
+              "is_upgrade_start_y_n",
+              "upg_start_prspct_type_code",
+              "is_spanning",
+              "prspct_chnl_prev_day",
+              "eu_page_title",
+              "eu_page_grp_name",
+              "eu_page_name",
+              "eu_page_lnk",
+              "referrer_domain",
+              "scndry_prty_cookie_id",
+              "rosetta_lang_cd",
+              "mobile_device_id",
+              "referring_url",
+              "evnt_page_url",
+              "cnt_pv_prspct",
+              "cnt_sessn_prspct_pv",
+              "cnt_sessn_signup_start_pv",
+              "tfs_category",
+              "channel_pros_tag",
+              "channel_flow"
+            ]
+          }
+        }
+      },
+      "metricsSpec": [
+        {
+          "type": "count",
+          "name": "count"
+        },
+        {
+          "type": "hyperUnique",
+          "name": "dist_visitors",
+          "fieldName": "visitor_id"
+        },
+        {
+          "type": "hyperUnique",
+          "name": "dist_customers",
+          "fieldName": "cust_id"
+        }
+      ],
+      "granularitySpec": {
+        "type": "uniform",
+        "segmentGranularity": "DAY",
+        "queryGranularity": "DAY",
+        "rollup": true,
+        "intervals": [
+          "2017-06-12T00:00:00.000Z/2017-06-16T00:00:00.000Z"
+        ]
+      }
+    },
+    "ioConfig": {
+      "type": "hadoop",
+      "inputSpec": {
+        "type": "granularity",
+        "dataGranularity": "DAY",
+        "inputFormat": "io.druid.data.input.parquet.DruidParquetInputFormat",
+        "inputPath": "/sys/dt/fpti/druid/events/comet/",
+        "pathFormat": "'data_date'=yyyy-MM-dd",
+        "filePattern": ".*"
+      }
+    },
+    "tuningConfig": {
+      "type": "hadoop",
+      "workingPath": null,
+      "version": "2017-02-09T07:36:09.249Z",
+      "partitionsSpec": {
+        "type": "hashed",
+        "targetPartitionSize": 500000,
+        "maxPartitionSize": 750000,
+        "assumeGrouped": false,
+        "numShards": -1,
+        "partitionDimensions": [
+        ]
+      },
+      "shardSpecs": {
+      },
+      "indexSpec": {
+        "bitmap": {
+          "type": "concise"
+        },
+        "dimensionCompression": "lz4",
+        "metricCompression": "lz4",
+        "longEncoding": "longs"
+      },
+      "maxRowsInMemory": 75000,
+      "leaveIntermediate": true,
+      "cleanupOnFailure": true,
+      "overwriteFiles": false,
+      "ignoreInvalidRows": false,
+      "jobProperties": {
+        "hdp.version": "2.6.1.0-129",
+        "mapreduce.job.user.classpath.first": "true",
+        "mapreduce.task.timeout": "1800000",
+        "mapreduce.map.memory.mb": "5120",
+        "mapreduce.map.java.opts": "-server -Xmx3072m -Duser.timezone=UTC -Dfile.encoding=UTF-8",
+        "mapreduce.reduce.memory.mb": "10240",
+        "mapreduce.reduce.java.opts": "-server -Xmx8192m -Duser.timezone=UTC -Dfile.encoding=UTF-8",
+        "mapred.child.ulimit": "16777216",
+        "mapreduce.map.output.compress": "true",
+        "mapred.map.output.compress.codec": "org.apache.hadoop.io.compress.SnappyCodec"
+      },
+      "combineText": false,
+      "useCombiner": false,
+      "buildV9Directly": false,
+      "numBackgroundPersistThreads": 0,
+      "forceExtendableShardSpecs": false
+    },
+    "uniqueId": "715f31321096480b869aca2cc9c5d252"
+  },
+  "hadoopDependencyCoordinates": [
+    "org.apache.hadoop:hadoop-client:2.7.3.2.6.1.0-129"
+  ]
+}
